@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profesyonel Teklif Sistemi</title>
+    <title>Kademe Bazlı Teklif Sistemi v18</title>
     <style>
         :root {
-            --primary: #203764;      /* Ana Lacivert */
-            --secondary: #4472c4;    /* Excel Mavisi */
-            --active-bg: #d1e7dd;    /* Aktif kolon arka planı */
-            --active-border: #198754;/* Aktif kolon kenarlığı */
-            --custom-bg: #fff0f0;    /* Manuel giriş arka planı */
-            --bg: #f4f6f9;           /* Sayfa arka planı */
-            --dark-footer: #343a40;  /* Alt Kısım Koyu Renk */
+            --primary: #203764;
+            --secondary: #4472c4;
+            --active-text: #0f5132;
+            --active-bg: #d1e7dd;
+            --bg: #f4f6f9;
+            --dark-footer: #343a40;
         }
 
         body {
@@ -44,7 +43,6 @@
             text-align: center;
             font-weight: 700;
             font-size: 1.2em;
-            letter-spacing: 0.5px;
         }
 
         .scroll-y { overflow-y: auto; flex: 1; padding-bottom: 20px; }
@@ -80,7 +78,6 @@
             color: var(--primary);
             font-size: 1.1em;
         }
-        .qty-input:focus { outline: 2px solid var(--secondary); border-color: transparent; }
 
         .group-total-row {
             background: #f1f5f9;
@@ -92,19 +89,14 @@
             border-bottom: 1px solid #dee2e6;
         }
 
-        /* Sol Alt Kutu */
         .summary-box {
             padding: 20px;
             background: var(--dark-footer);
             color: white;
             text-align: center;
             border-top: 1px solid #4b545c;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            /* Yükseklik sabitleme (Hizalama için) */
-            height: 110px; 
-            box-sizing: border-box;
+            height: 110px; box-sizing: border-box;
+            display: flex; flex-direction: column; justify-content: center;
         }
 
         /* --- SAĞ PANEL --- */
@@ -123,187 +115,95 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
         .platform-info {
-            background: #e3f2fd;
-            color: #0d47a1;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-weight: bold;
-            border: 1px solid #bbdefb;
+            background: #e3f2fd; color: #0d47a1; padding: 8px 15px; border-radius: 6px; font-weight: bold; border: 1px solid #bbdefb;
         }
 
         .content {
-            flex: 1;
-            padding: 30px;
-            overflow: auto;
-            background: #f4f6f9;
+            flex: 1; padding: 30px; overflow: auto; background: #f4f6f9;
         }
 
         .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
-            margin-bottom: 30px;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
-            display: flex;
-            flex-direction: column;
+            background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); margin-bottom: 30px; overflow: hidden; border: 1px solid #e0e0e0;
+            display: flex; flex-direction: column;
         }
 
         .card-header {
-            background: var(--primary);
-            color: white;
-            padding: 12px 20px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.1em;
+            background: var(--primary); color: white; padding: 12px 20px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; font-size: 1.1em;
         }
 
         .btn-add {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            cursor: pointer;
-            font-weight: bold;
+            background: #28a745; color: white; border: none; padding: 5px 12px; border-radius: 4px; font-size: 0.8em; cursor: pointer; font-weight: bold;
         }
-
-        .del-cell { color: #dc3545; cursor: pointer; font-weight: bold; font-size: 1.2em; text-align: center; }
 
         table { width: 100%; border-collapse: collapse; text-align: center; }
         
         th {
-            background: #f8f9fa;
-            color: #555;
-            padding: 12px 8px;
-            font-size: 0.85em;
-            border: 1px solid #dee2e6;
-            vertical-align: middle;
-            font-weight: 700;
+            background: #f8f9fa; color: #555; padding: 12px 8px; font-size: 0.85em; border: 1px solid #dee2e6; vertical-align: middle; font-weight: 700;
         }
 
         td {
-            padding: 8px 8px;
-            border: 1px solid #f1f1f1;
-            vertical-align: middle;
+            padding: 8px 8px; border: 1px solid #f1f1f1; vertical-align: middle;
         }
 
         .ref-price {
-            background: #f1f3f5;
-            color: #666;
-            font-family: 'Consolas', monospace;
-            font-weight: bold;
-            border: none;
-            width: 100%;
-            text-align: right;
-            padding-right: 5px;
+            background: #fff; color: #333; font-family: 'Consolas', monospace; font-weight: bold; border: 2px solid #ddd; border-radius: 4px; width: 90%; text-align: right; padding: 6px;
         }
 
-        .price-input {
-            width: 85%;
-            text-align: right;
-            border: 1px solid #e0e0e0;
-            padding: 6px;
-            border-radius: 4px;
-            color: #333;
-            background: white;
-            font-family: 'Consolas', monospace;
+        /* HESAPLANMIŞ HÜCRELER */
+        .calc-cell {
+            font-family: 'Consolas', monospace; text-align: right; color: #888; font-size: 0.95em; padding-right: 10px; transition: 0.3s;
         }
         
-        .active-col {
-            background-color: var(--active-bg) !important;
-            border-left: 2px solid var(--active-border);
-            border-right: 2px solid var(--active-border);
-        }
-        .active-col .price-input {
-            border-color: var(--active-border);
-            font-weight: bold;
-            background: #fff;
-            color: #0f5132;
+        /* AKTİF HÜCRE (Yeşil Yanan) */
+        .active-cell {
+            color: var(--active-text) !important;
+            font-weight: 900 !important;
+            font-size: 1.15em !important;
+            background-color: var(--active-bg);
+            border-radius: 4px;
+            padding: 5px;
         }
 
-        .custom-col { background-color: var(--custom-bg); border-left: 2px solid #dc3545; }
-        .custom-input { 
-            width: 42%; padding: 5px; border: 1px solid #e0e0e0; 
-            border-radius: 3px; text-align: center; font-weight: bold; font-size: 0.9em;
+        /* Level Selector Dropdown */
+        .level-select {
+            padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-size: 0.9em; width: 100%; color: var(--primary); font-weight: 600;
         }
+
+        .custom-col { background-color: #fff0f0; border-left: 2px solid #dc3545; }
+        .custom-input { width: 42%; padding: 5px; border: 1px solid #e0e0e0; border-radius: 3px; text-align: center; font-weight: bold; font-size: 0.9em; }
         
         .inp-flat { border: none; width: 100%; text-align: left; font-weight: 600; color: #333; }
         .row-total { font-weight: 800; text-align: right; padding-right: 15px; font-size: 1.1em; color: var(--primary); font-family: 'Consolas', monospace;}
-        .multiplier-badge { display: inline-block; background: #e2e8f0; color: #475569; font-size: 0.75em; border-radius: 12px; padding: 2px 8px; margin-top: 4px; }
+        
+        .multiplier-badge { display: inline-block; background: #e2e8f0; color: #475569; font-size: 0.75em; border-radius: 12px; padding: 2px 8px; margin-top: 4px; font-weight: normal; }
 
-        .card-footer-summary {
-            background: #fafbfc;
-            border-top: 1px solid #dee2e6;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 40px;
-        }
+        .card-footer-summary { background: #fafbfc; border-top: 1px solid #dee2e6; padding: 15px 20px; display: flex; justify-content: flex-end; gap: 40px; }
         .card-stat { text-align: right; border-left: 3px solid var(--secondary); padding-left: 15px; }
         .card-stat small { display: block; font-size: 0.75em; color: #888; text-transform: uppercase; font-weight:bold; }
         .card-stat span { display: block; font-size: 1.2em; color: #333; font-weight: 800; font-family: 'Consolas', monospace;}
 
-        /* --- SAĞ ALT (FOOTER) - GÜNCELLENDİ --- */
+        /* FOOTER */
         .footer {
-            background: var(--dark-footer); /* Sol ile aynı koyu renk */
-            border-top: 1px solid #4b545c;
-            padding: 20px 40px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            z-index: 20;
-            /* Yükseklik sabitleme (Sol tarafla aynı hizaya gelmesi için padding'i kutu içine sığdırıyoruz) */
-            height: 110px;
-            box-sizing: border-box;
-            align-items: center; /* İçeriği dikey ortala */
+            background: var(--dark-footer); border-top: 1px solid #4b545c; padding: 20px 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; z-index: 20; height: 110px; box-sizing: border-box; align-items: center;
         }
-
         .kpi { 
-            text-align: center; 
-            padding: 10px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1); /* Şeffaf Beyaz */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            height: 100%; /* Kutu yüksekliğini doldur */
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            text-align: center; padding: 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;
         }
-        .kpi small { 
-            display: block; 
-            font-size: 0.7em; 
-            color: #ced4da; 
-            text-transform: uppercase; 
-            font-weight: 700; 
-            margin-bottom: 5px;
-        }
-        .kpi div { 
-            font-size: 1.4em; 
-            font-weight: 800; 
-            color: #fff; 
-        }
-        
-        /* Highlight Kutuları (Sarımtırak) */
-        .highlight { 
-            background: rgba(255, 193, 7, 0.15); 
-            border-color: rgba(255, 193, 7, 0.3); 
-        }
-        .highlight div { color: #ffc107; } /* Sarı Metin */
+        .kpi small { display: block; font-size: 0.7em; color: #ced4da; text-transform: uppercase; font-weight: 700; margin-bottom: 5px;}
+        .kpi div { font-size: 1.4em; font-weight: 800; color: #fff; }
+        .highlight { background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.3); }
+        .highlight div { color: #ffc107; }
 
-        /* Drag Handle */
         .drag-handle { cursor: grab; color: #aaa; font-size: 1.2em; width: 30px; user-select: none; }
-        .drag-handle:active { cursor: grabbing; }
         .dragging { opacity: 0.5; background-color: #f0f0f0; border: 2px dashed #999; }
+        
+        .price-input { width: 85%; text-align: right; border: 1px solid #e0e0e0; padding: 6px; border-radius: 4px; color: #333; background: white; font-family: 'Consolas', monospace; }
+        .row-disabled { opacity: 0.4; background-color: #f9f9f9; }
+        .row-select { width: 18px; height: 18px; cursor: pointer; }
+        .del-cell { color: #dc3545; cursor: pointer; font-weight: bold; font-size: 1.2em; text-align: center; }
 
     </style>
 </head>
@@ -342,7 +242,7 @@
     <div class="summary-box">
         <small style="opacity:0.7; letter-spacing:1px; color:#ced4da;">TOPLAM ÖĞRENCİ</small>
         <div style="font-size:2.5em; font-weight:bold; margin-top:5px; color:#fff;" id="lblTotalStudents">0</div>
-        <div style="color:#ffc107; margin-top:5px; font-weight:bold; font-size:0.9em;" id="lblRangeInfo">Aralık: 0-250</div>
+        <div style="color:#ffc107; margin-top:5px; font-weight:bold; font-size:0.9em;" id="lblRangeInfo">Seçim Yok</div>
     </div>
 </div>
 
@@ -352,8 +252,8 @@
             ℹ️ Paket Bilgileri: <strong>TeknoPaket (399 ₺)</strong> | <strong>MasterPaket (1050 ₺)</strong>
         </div>
         <div style="color:#666; font-size:0.9em; text-align:right;">
-            <div>* Ref. Birim Fiyatı değiştirerek tüm satırı güncelleyebilirsiniz.</div>
-            <div>* ☰ İkonundan tutarak satırları sıralayabilirsiniz.</div>
+            <div>* "Hedef Kademe"yi değiştirerek ürünün hangi öğrenci sayısına bakacağını seçin.</div>
+            <div>* ☰ İkonundan tutarak sıralamayı değiştirebilirsiniz.</div>
         </div>
     </div>
 
@@ -362,58 +262,27 @@
         <div class="card">
             <div class="card-header">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <span>🔬 LAB PROJE SEÇİMİ</span>
-                    <button class="btn-add" onclick="addNewRow('projects')">+ Ekle</button>
-                </div>
-                <small style="font-weight:normal; opacity:0.9;">Adet Çarpanı x Girilen Fiyat</small>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th width="30"></th>
-                        <th width="20%" style="text-align:left; padding-left:15px;">PROJE ADI</th>
-                        <th width="10%">REF. BİRİM FİYAT</th>
-                        
-                        <th id="th_p_1" class="col-range">0-250<br><span class="multiplier-badge">x3 Adet</span></th>
-                        <th id="th_p_2" class="col-range">251-500<br><span class="multiplier-badge">x6 Adet</span></th>
-                        <th id="th_p_3" class="col-range">501-1000<br><span class="multiplier-badge">x9 Adet</span></th>
-                        <th id="th_p_4" class="col-range">1000+<br><span class="multiplier-badge">x12 Adet</span></th>
-                        
-                        <th class="custom-col" width="12%">ÖZEL (MANUEL)<br><small>Adet & Fiyat</small></th>
-                        <th width="12%">TOPLAM</th>
-                        <th width="30"></th>
-                    </tr>
-                </thead>
-                <tbody id="bodyProjects" class="sortable-list"></tbody>
-            </table>
-            <div class="card-footer-summary">
-                <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_projects">0 ₺</span></div>
-                <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_projects">0 ₺</span></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div style="display:flex; align-items:center; gap:10px;">
                     <span>🛠 LAB MALZEME SEÇİMİ</span>
                     <button class="btn-add" onclick="addNewRow('materials')">+ Ekle</button>
                 </div>
-                <small style="font-weight:normal; opacity:0.9;">Adet Çarpanı x Girilen Fiyat</small>
+                <small style="font-weight:normal; opacity:0.9;">Fiyat x Çarpan (Kademeye Göre)</small>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th width="30"></th>
-                        <th width="20%" style="text-align:left; padding-left:15px;">MALZEME ADI</th>
+                        <th width="30">Seç</th>
+                        <th width="15%" style="text-align:left; padding-left:10px;">MALZEME ADI</th>
+                        <th width="10%">HEDEF KADEME</th>
                         <th width="10%">REF. BİRİM FİYAT</th>
                         
-                        <th id="th_m_1" class="col-range">4/1<br><span class="multiplier-badge">x6 Adet</span></th>
-                        <th id="th_m_2" class="col-range">4/2<br><span class="multiplier-badge">x12 Adet</span></th>
-                        <th id="th_m_3" class="col-range">4/3<br><span class="multiplier-badge">x18 Adet</span></th>
-                        <th id="th_m_4" class="col-range">4/4<br><span class="multiplier-badge">x24 Adet</span></th>
+                        <th class="col-range">Lab Dağalımı (4/1) 1-250<br><span class="multiplier-badge">x6 Adet</span></th>
+                        <th class="col-range">Lab Dağalımı (4/2) 251-500<br><span class="multiplier-badge">x12 Adet</span></th>
+                        <th class="col-range">Lab Dağalımı (4/3) 501-1000<br><span class="multiplier-badge">x18 Adet</span></th>
+                        <th class="col-range">Lab Dağalımı (4/4) 1000+<br><span class="multiplier-badge">x24 Adet</span></th>
                         
-                        <th class="custom-col" width="12%">ÖZEL (MANUEL)<br><small>Adet & Fiyat</small></th>
-                        <th width="12%">TOPLAM</th>
+                        <th class="custom-col" width="10%">ÖZEL<br><small>Adet & Fiyat</small></th>
+                        <th width="10%">TOPLAM</th>
                         <th width="30"></th>
                     </tr>
                 </thead>
@@ -422,6 +291,40 @@
             <div class="card-footer-summary">
                 <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_materials">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_materials">0 ₺</span></div>
+            </div>
+        </div>
+         <div class="card">
+            <div class="card-header">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span>🔬 LAB PROJE SEÇİMİ</span>
+                    <button class="btn-add" onclick="addNewRow('projects')">+ Ekle</button>
+                </div>
+                <small style="font-weight:normal; opacity:0.9;">Fiyat x Çarpan (Kademeye Göre)</small>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="30"></th>
+                        <th width="30">Seç</th>
+                        <th width="15%" style="text-align:left; padding-left:10px;">PROJE ADI</th>
+                        <th width="10%">HEDEF KADEME</th>
+                        <th width="10%">REF. BİRİM FİYAT</th>
+                        
+                        <th class="col-range">Lab Dağalımı (18) 1-250<br><span class="multiplier-badge">x3 Adet</span></th>
+                        <th class="col-range">Lab Dağalımı (36) 251-500<br><span class="multiplier-badge">x6 Adet</span></th>
+                        <th class="col-range">Lab Dağalımı (54) 501-1000<br><span class="multiplier-badge">x9 Adet</span></th>
+                        <th class="col-range">Lab Dağalımı (72) 1000+<br><span class="multiplier-badge">x12 Adet</span></th>
+                        
+                        <th class="custom-col" width="10%">ÖZEL<br><small>Adet & Fiyat</small></th>
+                        <th width="10%">TOPLAM</th>
+                        <th width="30"></th>
+                    </tr>
+                </thead>
+                <tbody id="bodyProjects" class="sortable-list"></tbody>
+            </table>
+            <div class="card-footer-summary">
+                <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_projects">0 ₺</span></div>
+                <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_projects">0 ₺</span></div>
             </div>
         </div>
 
@@ -437,6 +340,7 @@
                 <thead>
                     <tr>
                         <th width="30"></th>
+                        <th width="30">Seç</th>
                         <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
                         <th width="15%">BİRİM FİYAT</th>
                         <th width="15%">İLGİLİ SINIF / ADET</th>
@@ -446,6 +350,10 @@
                 </thead>
                 <tbody id="bodyIndividual" class="sortable-list"></tbody>
             </table>
+            <div class="card-footer-summary">
+                <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_individual">0 ₺</span></div>
+                <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_individual">0 ₺</span></div>
+            </div>
         </div>
 
     </div>
@@ -455,10 +363,6 @@
             <small>TOPLAM MALZEME GİDERİ</small>
             <div id="valMaterial">0 ₺</div>
         </div>
-        <div class="kpi">
-            <small>PLATFORM GELİRİ</small>
-            <div id="valPlatform">0 ₺</div>
-        </div>
         <div class="kpi highlight">
             <small>MALİYET + TEKNOPAKET (Öğr. Başı)</small>
             <div id="valTekno">0 ₺</div>
@@ -467,30 +371,31 @@
             <small>MALİYET + MASTERPAKET (Öğr. Başı)</small>
             <div id="valMaster">0 ₺</div>
         </div>
-    </div>
+        <div class="kpi" style="border:none; background:none;"></div> </div>
 </div>
 
 <script>
     const configProjects = { multipliers: [3, 6, 9, 12] };
     const configMaterials = { multipliers: [6, 12, 18, 24] };
 
+    // Veri Tabanı (level: 'pre', 'pri', 'mid', 'high', 'all')
     const dbProjects = [
-        { name: "AKILLI ARABA", price: 2500 },
-        { name: "HACİM ÖLÇER", price: 2500 },
-        { name: "DİNAMOMETRE", price: 2500 },
-        { name: "KUŞ EVİ", price: 2500 },
-        { name: "MÜCEVHER KORUMA", price: 2500 },
-        { name: "AKILLI KUMBARA", price: 2500 }
+        { name: "AKILLI ARABA", price: 2500, level: 'all' },
+        { name: "HACİM ÖLÇER", price: 2500, level: 'all' },
+        { name: "DİNAMOMETRE", price: 2500, level: 'all' },
+        { name: "KUŞ EVİ", price: 2500, level: 'all' },
+        { name: "MÜCEVHER KORUMA", price: 2500, level: 'all' },
+        { name: "AKILLI KUMBARA", price: 2500, level: 'all' }
     ];
 
     const dbMaterials = [
-        { name: "TURP", price: 1750 },
-        { name: "KÜMÜLÜS", price: 2000 },
-        { name: "KIRMIZI KUTU", price: 2500 },
-        { name: "SİYAH KUTU", price: 3000 },
-        { name: "Cubetto Robot", price: 8500 },
-        { name: "Mbot Robot", price: 4500 },
-        { name: "3B Yazıcı Filament", price: 500 }
+        { name: "TURP", price: 1750, level: 'pre' }, // Okul Öncesi
+        { name: "KÜMÜLÜS", price: 2000, level: 'pri' }, // İlkokul
+        { name: "KIRMIZI KUTU", price: 2500, level: 'all' },
+        { name: "SİYAH KUTU", price: 3000, level: 'all' },
+        { name: "Cubetto Robot", price: 8500, level: 'all' },
+        { name: "Mbot Robot", price: 4500, level: 'all' },
+        { name: "3B Yazıcı Filament", price: 500, level: 'all' }
     ];
 
     const dbIndividual = [
@@ -504,7 +409,7 @@
         { name: "4.SINIF ASANSÖR PROJESİ", price: 200, targetClass: "s4" }
     ];
 
-    let currentLevelIndex = -1;
+    let counts = {}; 
 
     window.onload = function() {
         renderTables();
@@ -514,39 +419,64 @@
 
     function renderTables() {
         const tbProj = document.getElementById("bodyProjects");
-        dbProjects.forEach(p => {
-            tbProj.insertAdjacentHTML('beforeend', createMatrixRow('projects', p.name, p.price));
+        dbProjects.forEach((p, index) => {
+            tbProj.insertAdjacentHTML('beforeend', createMatrixRow('projects', p.name, p.price, p.level, index === 0));
         });
 
         const tbMat = document.getElementById("bodyMaterials");
-        dbMaterials.forEach(m => {
-            tbMat.insertAdjacentHTML('beforeend', createMatrixRow('materials', m.name, m.price));
+        dbMaterials.forEach((m, index) => {
+            tbMat.insertAdjacentHTML('beforeend', createMatrixRow('materials', m.name, m.price, m.level, index === 0));
         });
 
         const tbInd = document.getElementById("bodyIndividual");
-        dbIndividual.forEach(i => {
-            tbInd.insertAdjacentHTML('beforeend', createIndividualRow(i.name, i.price, i.targetClass, 0));
+        dbIndividual.forEach((i, index) => {
+            tbInd.insertAdjacentHTML('beforeend', createIndividualRow(i.name, i.price, i.targetClass, 0, index === 0));
         });
     }
 
-    function createMatrixRow(type, name, refPrice) {
+    // HTML SATIR OLUŞTURUCU (KADEME MENÜSÜ EKLENDİ)
+    function createMatrixRow(type, name, refPrice, level, isChecked) {
         let prefix = type === 'projects' ? 'p' : 'm';
         let clsTot = type === 'projects' ? 'proj-total' : 'mat-total';
-        let initVal = 0; 
+        let multipliers = type === 'projects' ? configProjects.multipliers : configMaterials.multipliers;
         
-        return `<tr draggable="true">
+        let v0 = refPrice * multipliers[0];
+        let v1 = refPrice * multipliers[1];
+        let v2 = refPrice * multipliers[2];
+        let v3 = refPrice * multipliers[3];
+        
+        let checkAttr = isChecked ? 'checked' : '';
+
+        // Kademe Seçenekleri
+        let lvlOpts = `
+            <option value="all">Tüm Okul</option>
+            <option value="pre">Okul Öncesi</option>
+            <option value="pri">İlkokul</option>
+            <option value="mid">Ortaokul</option>
+            <option value="high">Lise</option>
+        `;
+        if(level) lvlOpts = lvlOpts.replace(`value="${level}"`, `value="${level}" selected`);
+
+        return `<tr draggable="true" data-type="${type}" data-level="${level || 'all'}">
             <td class="drag-handle">☰</td>
+            <td><input type="checkbox" class="row-select" ${checkAttr} onchange="calculateAll()"></td>
             <td><input class="inp-flat" value="${name}" placeholder="Ürün Adı"></td>
             
-            <td><input class="ref-price" value="${refPrice}" oninput="updateRowPrices(this)"></td>
+            <td>
+                <select class="level-select" onchange="updateRowLevel(this)">
+                    ${lvlOpts}
+                </select>
+            </td>
+
+            <td><input type="number" min="0" class="ref-price" value="${refPrice}" oninput="updateRowPrices(this, '${type}')"></td>
             
-            <td class="col-range col-0"><input type="number" min="0" class="price-input ${prefix}-price-0" value="${initVal}" oninput="calcTotalsOnly()"></td>
-            <td class="col-range col-1"><input type="number" min="0" class="price-input ${prefix}-price-1" value="${initVal}" oninput="calcTotalsOnly()"></td>
-            <td class="col-range col-2"><input type="number" min="0" class="price-input ${prefix}-price-2" value="${initVal}" oninput="calcTotalsOnly()"></td>
-            <td class="col-range col-3"><input type="number" min="0" class="price-input ${prefix}-price-3" value="${initVal}" oninput="calcTotalsOnly()"></td>
+            <td><div class="calc-cell ${prefix}-cell-0">${fmtSimple(v0)}</div></td>
+            <td><div class="calc-cell ${prefix}-cell-1">${fmtSimple(v1)}</div></td>
+            <td><div class="calc-cell ${prefix}-cell-2">${fmtSimple(v2)}</div></td>
+            <td><div class="calc-cell ${prefix}-cell-3">${fmtSimple(v3)}</div></td>
 
             <td class="custom-col">
-                <input type="number" min="0" class="custom-input custom-qty ${prefix}-cust-qty" placeholder="Adet" oninput="calcTotalsOnly()">
+                <input type="number" min="0" class="custom-input custom-qty ${prefix}-cust-qty" placeholder="Adet" oninput="calculateAll()">
                 <input type="number" min="0" class="custom-input custom-price ${prefix}-cust-price" placeholder="Fiyat" oninput="calcTotalsOnly()">
             </td>
             <td class="row-total ${clsTot}">0 ₺</td>
@@ -554,7 +484,7 @@
         </tr>`;
     }
 
-    function createIndividualRow(name, price, target, qtyVal) {
+    function createIndividualRow(name, price, target, qtyVal, isChecked) {
         let options = `<option value="manual">Manuel</option>
             <option value="s0">0. Sınıf</option>
             <option value="s1">1. Sınıf</option>
@@ -571,11 +501,13 @@
         let isManual = !target || target === 'manual';
         let qtyAttr = isManual ? '' : 'readonly style="background:#eee;"';
         let val = qtyVal || 0;
+        let checkAttr = isChecked ? 'checked' : '';
 
         return `<tr data-target="${target || 'manual'}" draggable="true">
             <td class="drag-handle">☰</td>
+            <td><input type="checkbox" class="row-select" ${checkAttr} onchange="calculateAll()"></td>
             <td><input class="inp-flat" value="${name}" placeholder="Ürün Adı"></td>
-            <td><input type="number" min="0" class="price-input ind-price" value="${price}" oninput="calcTotalsOnly()"></td>
+            <td><input type="number" min="0" class="price-input ind-price" value="${price}" oninput="calculateAll()"></td>
             <td style="display:flex; gap:5px; align-items:center; justify-content:center;">
                 <select style="width:80px; font-size:0.8em;" onchange="changeIndTarget(this)">${options}</select>
                 <input type="number" min="0" class="qty-input ind-qty" value="${val}" ${qtyAttr} oninput="calcTotalsOnly()">
@@ -585,21 +517,38 @@
         </tr>`;
     }
 
+    function updateRowLevel(sel) {
+        let row = sel.closest('tr');
+        row.setAttribute('data-level', sel.value);
+        calculateAll();
+    }
+
+    function updateRowPrices(refInput, type) {
+        let row = refInput.closest('tr');
+        if(refInput.value < 0) refInput.value = 0;
+        let newPrice = parseFloat(refInput.value) || 0;
+        
+        let multipliers = type === 'projects' ? configProjects.multipliers : configMaterials.multipliers;
+        let prefix = type === 'projects' ? 'p' : 'm';
+
+        row.querySelector(`.${prefix}-cell-0`).innerText = fmtSimple(newPrice * multipliers[0]);
+        row.querySelector(`.${prefix}-cell-1`).innerText = fmtSimple(newPrice * multipliers[1]);
+        row.querySelector(`.${prefix}-cell-2`).innerText = fmtSimple(newPrice * multipliers[2]);
+        row.querySelector(`.${prefix}-cell-3`).innerText = fmtSimple(newPrice * multipliers[3]);
+
+        calculateAll();
+    }
+
     function initDragAndDrop() {
         const lists = document.querySelectorAll('.sortable-list');
         lists.forEach(list => {
-            list.addEventListener('dragstart', (e) => {
-                if(e.target.tagName === 'TR') e.target.classList.add('dragging');
-            });
-            list.addEventListener('dragend', (e) => {
-                if(e.target.tagName === 'TR') e.target.classList.remove('dragging');
-            });
+            list.addEventListener('dragstart', (e) => { if(e.target.tagName === 'TR') e.target.classList.add('dragging'); });
+            list.addEventListener('dragend', (e) => { if(e.target.tagName === 'TR') e.target.classList.remove('dragging'); });
             list.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 const afterElement = getDragAfterElement(list, e.clientY);
                 const draggable = document.querySelector('.dragging');
-                if (afterElement == null) list.appendChild(draggable);
-                else list.insertBefore(draggable, afterElement);
+                if (afterElement == null) list.appendChild(draggable); else list.insertBefore(draggable, afterElement);
             });
         });
     }
@@ -609,55 +558,35 @@
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = y - box.top - box.height / 2;
-            if (offset < 0 && offset > closest.offset) return { offset: offset, element: child };
-            else return closest;
+            if (offset < 0 && offset > closest.offset) return { offset: offset, element: child }; else return closest;
         }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-    function updateRowPrices(refInput) {
-        let row = refInput.closest('tr');
-        let newPrice = parseFloat(refInput.value) || 0;
-        row.querySelectorAll('.price-input').forEach(inp => {
-            if(!inp.classList.contains('ind-price')) inp.value = newPrice;
-        });
-        calcTotalsOnly();
     }
 
     function addNewRow(type) {
         let containerId = type === 'projects' ? 'bodyProjects' : (type === 'materials' ? 'bodyMaterials' : 'bodyIndividual');
-        let rowHtml = type === 'projects' ? createMatrixRow('projects', '', 0) : 
-                      (type === 'materials' ? createMatrixRow('materials', '', 0) : createIndividualRow('', 0, null, 0));
+        let rowHtml = type === 'projects' ? createMatrixRow('projects', '', 0, 'all', true) : 
+                      (type === 'materials' ? createMatrixRow('materials', '', 0, 'all', true) : createIndividualRow('', 0, null, 0, true));
         
         document.getElementById(containerId).insertAdjacentHTML('beforeend', rowHtml);
         calculateAll(true);
     }
 
-    function delRow(btn) {
-        btn.closest('tr').remove();
-        calcTotalsOnly();
-    }
+    function delRow(btn) { btn.closest('tr').remove(); calculateAll(); }
 
     function changeIndTarget(sel) {
         let row = sel.closest('tr');
         let val = sel.value;
         let qtyInp = row.querySelector('.ind-qty');
-        
         row.setAttribute('data-target', val);
-        
-        if(val === 'manual') {
-            qtyInp.removeAttribute('readonly');
-            qtyInp.style.background = '#fff';
-            qtyInp.value = 0;
-        } else {
-            qtyInp.setAttribute('readonly', true);
-            qtyInp.style.background = '#eee';
-        }
+        if(val === 'manual') { qtyInp.removeAttribute('readonly'); qtyInp.style.background = '#fff'; qtyInp.value = 0; }
+        else { qtyInp.setAttribute('readonly', true); qtyInp.style.background = '#eee'; }
         calculateAll();
     }
 
     function calculateAll(forceUpdate = false) {
-        let counts = {};
-        const ids = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12'];
+        // 1. ÖĞRENCİ SAYILARINI TOPLA (Sınıf ve Kademe Bazlı)
+        counts = { s0:0, s1:0, s2:0, s3:0, s4:0, s5:0, s6:0, s7:0, s8:0, s9:0, s10:0, s11:0, s12:0 };
+        const ids = Object.keys(counts);
         let totalAll = 0;
         
         ids.forEach(id => {
@@ -668,30 +597,26 @@
             totalAll += val;
         });
 
-        document.getElementById('sub_pre').innerText = counts['s0'];
-        document.getElementById('sub_primary').innerText = counts['s1'] + counts['s2'] + counts['s3'] + counts['s4'];
-        document.getElementById('sub_middle').innerText = counts['s5'] + counts['s6'] + counts['s7'] + counts['s8'];
-        document.getElementById('sub_high').innerText = counts['s9'] + counts['s10'] + counts['s11'] + counts['s12'];
+        // Kademe Toplamları
+        let subPre = counts['s0'];
+        let subPri = counts['s1'] + counts['s2'] + counts['s3'] + counts['s4'];
+        let subMid = counts['s5'] + counts['s6'] + counts['s7'] + counts['s8'];
+        let subHig = counts['s9'] + counts['s10'] + counts['s11'] + counts['s12'];
+
+        // Kademeleri Global Objeye Kaydet (Hesaplamada kullanmak için)
+        counts.pre = subPre;
+        counts.pri = subPri;
+        counts.mid = subMid;
+        counts.high = subHig;
+        counts.all = totalAll;
+
+        document.getElementById('sub_pre').innerText = subPre;
+        document.getElementById('sub_primary').innerText = subPri;
+        document.getElementById('sub_middle').innerText = subMid;
+        document.getElementById('sub_high').innerText = subHig;
         document.getElementById('lblTotalStudents').innerText = totalAll;
 
-        let levelIdx = 0;
-        let rangeText = "0 - 250";
-        if (totalAll > 1000) { levelIdx = 3; rangeText = "1000+"; }
-        else if (totalAll > 500) { levelIdx = 2; rangeText = "501 - 1000"; }
-        else if (totalAll > 250) { levelIdx = 1; rangeText = "251 - 500"; }
-        
-        document.getElementById("lblRangeInfo").innerText = "Aktif Aralık: " + rangeText;
-
-        if(levelIdx !== currentLevelIndex || forceUpdate) {
-            currentLevelIndex = levelIdx;
-            document.querySelectorAll('.active-col').forEach(el => el.classList.remove('active-col'));
-            document.querySelectorAll('.col-range').forEach(el => {
-                 if(el.classList.contains(`col-${levelIdx}`)) el.classList.add('active-col');
-            });
-            if(document.getElementById(`th_p_${levelIdx+1}`)) document.getElementById(`th_p_${levelIdx+1}`).classList.add('active-col');
-            if(document.getElementById(`th_m_${levelIdx+1}`)) document.getElementById(`th_m_${levelIdx+1}`).classList.add('active-col');
-        }
-
+        // Bireysel Ürün Miktarlarını Güncelle (Sınıf bazlı)
         document.querySelectorAll('#bodyIndividual tr').forEach(row => {
             let target = row.getAttribute('data-target');
             if(target && target !== 'manual') {
@@ -707,58 +632,94 @@
         if(totalStudents === null) totalStudents = parseInt(document.getElementById("lblTotalStudents").innerText);
         
         let grandMat = 0;
-        let activeIdx = currentLevelIndex;
         let projSubTotal = 0;
         let matSubTotal = 0;
 
-        document.querySelectorAll('#bodyProjects tr').forEach((row, i) => {
-            let custQty = parseFloat(row.querySelector('.p-cust-qty').value);
-            let custPrice = parseFloat(row.querySelector('.p-cust-price').value);
-            let tot = 0;
+        // PROJE ve MALZEME SATIRLARI (Ortak Mantık)
+        ['bodyProjects', 'bodyMaterials'].forEach(bodyId => {
+            let type = bodyId === 'bodyProjects' ? 'projects' : 'materials';
+            let prefix = type === 'projects' ? 'p' : 'm';
+            let totalClass = type === 'projects' ? '.proj-total' : '.mat-total';
+            let multipliers = type === 'projects' ? configProjects.multipliers : configMaterials.multipliers;
 
-            if(!isNaN(custQty) && !isNaN(custPrice) && custQty > 0) {
-                if(custQty < 0) custQty = 0;
-                if(custPrice < 0) custPrice = 0;
-                tot = custQty * custPrice;
-                row.querySelector('.proj-total').style.color = "#dc3545";
-            } else {
-                let elPrice = row.querySelector(`.p-price-${activeIdx}`);
-                if(elPrice.value < 0) elPrice.value = 0;
-                let price = parseFloat(elPrice.value) || 0;
-                let multiplier = configProjects.multipliers[activeIdx];
-                tot = price * multiplier;
-                row.querySelector('.proj-total').style.color = "var(--primary)";
-            }
-            
-            row.querySelector('.proj-total').innerText = fmt(tot);
-            projSubTotal += tot;
+            document.querySelectorAll(`#${bodyId} tr`).forEach((row, i) => {
+                let isChecked = row.querySelector('.row-select').checked;
+                
+                // Pasif Kontrolü
+                if(!isChecked) {
+                    row.classList.add('row-disabled');
+                    row.classList.remove('row-manual-active');
+                    row.querySelector(totalClass).innerText = fmt(0);
+                    // Hücre renklerini temizle
+                    row.querySelectorAll('.calc-cell').forEach(c => c.classList.remove('active-cell'));
+                    return;
+                }
+                row.classList.remove('row-disabled');
+
+                // Custom/Manuel Kontrolü
+                let custQty = parseFloat(row.querySelector(`.${prefix}-cust-qty`).value);
+                let custPrice = parseFloat(row.querySelector(`.${prefix}-cust-price`).value);
+                let tot = 0;
+
+                if(!isNaN(custQty) && !isNaN(custPrice) && custQty > 0) {
+                    if(custQty < 0) custQty = 0;
+                    if(custPrice < 0) custPrice = 0;
+                    tot = custQty * custPrice;
+                    row.classList.add('row-manual-active');
+                    row.querySelector(totalClass).style.color = "#dc3545";
+                    // Custom aktifse otomatik renkleri temizle
+                    row.querySelectorAll('.calc-cell').forEach(c => c.classList.remove('active-cell'));
+                } else {
+                    row.classList.remove('row-manual-active');
+                    
+                    // OTOMATİK KADEME HESAPLAMA
+                    let level = row.getAttribute('data-level'); // pre, pri, mid, high, all
+                    let relevantCount = counts[level] || 0; // O kademenin öğrenci sayısı
+                    
+                    let refPrice = parseFloat(row.querySelector('.ref-price').value) || 0;
+                    
+                    // Seviye Belirleme (1-250, 251-500, etc.)
+                    let activeIdx = -1;
+                    if (relevantCount > 0) {
+                        activeIdx = 0; // 1-250
+                        if (relevantCount > 1000) activeIdx = 3;
+                        else if (relevantCount > 500) activeIdx = 2;
+                        else if (relevantCount > 250) activeIdx = 1;
+                    }
+
+                    // Hücre Renklendirme ve Hesap
+                    row.querySelectorAll('.calc-cell').forEach(c => c.classList.remove('active-cell'));
+                    
+                    if (activeIdx !== -1) {
+                        let multiplier = multipliers[activeIdx];
+                        tot = refPrice * multiplier;
+                        // İlgili hücreyi boya
+                        row.querySelector(`.${prefix}-cell-${activeIdx}`).classList.add('active-cell');
+                    } else {
+                        tot = 0; // Öğrenci yoksa 0
+                    }
+                    
+                    row.querySelector(totalClass).style.color = "var(--primary)";
+                }
+                
+                row.querySelector(totalClass).innerText = fmt(tot);
+                
+                if(type === 'projects') projSubTotal += tot;
+                else matSubTotal += tot;
+            });
         });
 
-        document.querySelectorAll('#bodyMaterials tr').forEach((row, i) => {
-            let custQty = parseFloat(row.querySelector('.m-cust-qty').value);
-            let custPrice = parseFloat(row.querySelector('.m-cust-price').value);
-            let tot = 0;
-
-            if(!isNaN(custQty) && !isNaN(custPrice) && custQty > 0) {
-                if(custQty < 0) custQty = 0;
-                if(custPrice < 0) custPrice = 0;
-                tot = custQty * custPrice;
-                row.querySelector('.mat-total').style.color = "#dc3545";
-            } else {
-                let elPrice = row.querySelector(`.m-price-${activeIdx}`);
-                if(elPrice.value < 0) elPrice.value = 0;
-                let price = parseFloat(elPrice.value) || 0;
-                let multiplier = configMaterials.multipliers[activeIdx];
-                tot = price * multiplier;
-                row.querySelector('.mat-total').style.color = "var(--primary)";
-            }
-
-            row.querySelector('.mat-total').innerText = fmt(tot);
-            matSubTotal += tot;
-        });
-
+        // BİREYSEL
         let indSubTotal = 0;
         document.querySelectorAll('#bodyIndividual tr').forEach(row => {
+            let isChecked = row.querySelector('.row-select').checked;
+            if(!isChecked) {
+                row.classList.add('row-disabled');
+                row.querySelector('.ind-total').innerText = fmt(0);
+                return;
+            }
+            row.classList.remove('row-disabled');
+
             let pInput = row.querySelector('.ind-price');
             if(pInput.value < 0) pInput.value = 0;
             let price = parseFloat(pInput.value) || 0;
@@ -773,24 +734,20 @@
         
         document.getElementById('sum_materials').innerText = fmt(matSubTotal);
         document.getElementById('avg_materials').innerText = totalStudents > 0 ? fmt(matSubTotal/totalStudents) : "0 ₺";
+        
+        document.getElementById('sum_individual').innerText = fmt(indSubTotal);
+        document.getElementById('avg_individual').innerText = totalStudents > 0 ? fmt(indSubTotal/totalStudents) : "0 ₺";
 
         grandMat = projSubTotal + matSubTotal + indSubTotal;
         document.getElementById("valMaterial").innerText = fmt(grandMat);
-
-        // Platform sabit fiyat hesaplama
-        let platformTotal = totalStudents > 0 ? (totalStudents * 399) : 0; // Varsayılan Teknopaket (Örnek)
-        // Burada platform seçimi kalktığı için sabit bir hesaplama veya sadece gösterim yapabiliriz.
-        // Ancak formülde eski "platformSelect" referansı var, onu düzeltiyorum:
-        document.getElementById("valPlatform").innerText = fmt(platformTotal);
 
         let perStudentCost = totalStudents > 0 ? (grandMat / totalStudents) : 0;
         document.getElementById("valTekno").innerText = fmt(perStudentCost + 399);
         document.getElementById("valMaster").innerText = fmt(perStudentCost + 1050);
     }
 
-    function fmt(n) {
-        return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
-    }
+    function fmt(n) { return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺'; }
+    function fmtSimple(n) { return n.toLocaleString('tr-TR') + ' ₺'; } 
 
 </script>
 
