@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kademe Bazlı Teklif Sistemi</title>
+    <title>Kademe Bazlı Teklif Sistemi v27 - Bahadır Çalışkan</title>
     <style>
         :root {
             --primary: #203764;
@@ -187,9 +187,18 @@
         .card-stat small { display: block; font-size: 0.75em; color: #888; text-transform: uppercase; font-weight:bold; }
         .card-stat span { display: block; font-size: 1.2em; color: #333; font-weight: 800; font-family: 'Consolas', monospace;}
 
-        /* FOOTER */
+        /* FOOTER (GÜNCELLENDİ: 5 KOLON) */
         .footer {
-            background: var(--dark-footer); border-top: 1px solid #4b545c; padding: 20px 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; z-index: 20; height: 110px; box-sizing: border-box; align-items: center;
+            background: var(--dark-footer); 
+            border-top: 1px solid #4b545c; 
+            padding: 20px 40px; 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); /* 4'ten 5'e çıkarıldı */
+            gap: 20px; 
+            z-index: 20; 
+            height: 110px; 
+            box-sizing: border-box; 
+            align-items: center;
         }
         .kpi { 
             text-align: center; padding: 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;
@@ -462,6 +471,10 @@
         <div class="kpi highlight-extra">
             <small>EKSTRA SET & YAYIN TOPLAMI</small>
             <div id="valExtraTotal">0 ₺</div>
+        </div>
+        <div class="kpi highlight-extra">
+            <small>EKSTRA ORTALAMA (Adet Başı)</small>
+            <div id="valExtraAvg">0 ₺</div>
         </div> 
     </div>
 </div>
@@ -472,7 +485,7 @@
         const DEVELOPER_INFO = Object.freeze({
             name: "Bahadır Çalışkan", 
             contact: "Yazılım Geliştirici", 
-            version: "v1.0",
+            version: "v27.0",
             copyright: "© 2025 Bahadır Çalışkan - Tüm Hakları Saklıdır",
             message: "Bu yazılım mimarisi ve kod yapısı Bahadır Çalışkan tarafından tasarlanmıştır."
         });
@@ -597,7 +610,7 @@
     ];
 
     let counts = {}; 
-    const STORAGE_KEY = 'teklifSistemiV26_Data'; // v26
+    const STORAGE_KEY = 'teklifSistemiV27_Data'; // v27
 
     window.onload = function() {
         if(!loadFromLocal()) {
@@ -775,12 +788,10 @@
         });
         const tbExp = document.getElementById("bodyExperimentSets");
         dbExperiments.forEach((e, index) => {
-            // Varsayılan Adet 0 yapıldı
             tbExp.insertAdjacentHTML('beforeend', createSimpleRow('experimentSets', e.name, e.price, 0, index < 5));
         });
         const tbPre = document.getElementById("bodyPreschoolBoxes");
         dbPreschool.forEach((p, index) => {
-            // Varsayılan Adet 0 ve Manuel Giriş
             tbPre.insertAdjacentHTML('beforeend', createSimpleRow('preschoolBoxes', p.name, p.price, 0, index === 0));
         });
         const tbPlus = document.getElementById("bodyPlusServices");
@@ -912,10 +923,10 @@
             rowHtml = createIndividualRow('', 0, 'manual', 0, true);
         } else if (type === 'experimentSets') {
             containerId = 'bodyExperimentSets';
-            rowHtml = createSimpleRow('experimentSets', '', 0, 0, true); // Varsayılan adet 0
+            rowHtml = createSimpleRow('experimentSets', '', 0, 0, true);
         } else if (type === 'preschoolBoxes') {
             containerId = 'bodyPreschoolBoxes';
-            rowHtml = createSimpleRow('preschoolBoxes', '', 0, 0, true); // Varsayılan adet 0
+            rowHtml = createSimpleRow('preschoolBoxes', '', 0, 0, true);
         } else if (type === 'plusServices') {
             containerId = 'bodyPlusServices';
             rowHtml = createSimpleRow('plusServices', 'Ek Master Hizmet', 0, 0, true);
@@ -1095,13 +1106,12 @@
             if(pInput.value < 0) pInput.value = 0;
             let price = parseFloat(pInput.value) || 0;
             
-            // Adet Otomatik (Target Sınıfın Öğrenci Sayısı)
+            // Adet Otomatik
             let target = row.getAttribute('data-target');
             let qty = 0;
             if(target && counts[target] !== undefined) {
                 qty = counts[target];
             }
-            
             let tot = price * qty;
             row.querySelector('.ind-total').innerText = fmt(tot);
             indSubTotal += tot;
@@ -1188,6 +1198,11 @@
         document.getElementById("valMaster").innerText = fmt(perStudentCost + 1050 + plusPerStudent);
         let extraTotal = expSubTotal + preBoxSubTotal;
         document.getElementById("valExtraTotal").innerText = fmt(extraTotal);
+        
+        // YENİ EKSTRA ORTALAMA HESABI (SETLER + KUTULAR)
+        let totalExtraQty = expTotalQty + preBoxTotalQty;
+        let extraAvg = totalExtraQty > 0 ? (extraTotal / totalExtraQty) : 0;
+        document.getElementById("valExtraAvg").innerText = fmt(extraAvg);
     }
 
     function fmt(n) { return n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺'; }
