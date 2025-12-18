@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kademe Bazlı Teklif Sistemi v27 - Bahadır Çalışkan</title>
+    <title>Kademe Bazlı Teklif Sistemi v30 - Bahadır Çalışkan</title>
     <style>
         :root {
             --primary: #203764;
@@ -30,12 +30,14 @@
         /* --- SOL PANEL --- */
         .sidebar {
             width: 320px;
+            min-width: 320px;
             background: white;
             border-right: 1px solid #dee2e6;
             display: flex;
             flex-direction: column;
             box-shadow: 4px 0 10px rgba(0,0,0,0.03);
             z-index: 10;
+            transition: all 0.3s;
         }
 
         .header {
@@ -108,6 +110,7 @@
             flex-direction: column;
             background: white;
             overflow: hidden;
+            width: 100%;
         }
 
         .top-bar {
@@ -143,7 +146,14 @@
             background: #28a745; color: white; border: none; padding: 5px 12px; border-radius: 4px; font-size: 0.8em; cursor: pointer; font-weight: bold;
         }
 
-        table { width: 100%; border-collapse: collapse; text-align: center; }
+        /* TABLO RESPONSIVE AYARLARI */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; 
+        }
+
+        table { width: 100%; border-collapse: collapse; text-align: center; min-width: 900px; }
         
         th {
             background: #f8f9fa; color: #555; padding: 12px 8px; font-size: 0.85em; border: 1px solid #dee2e6; vertical-align: middle; font-weight: 700;
@@ -187,13 +197,60 @@
         .card-stat small { display: block; font-size: 0.75em; color: #888; text-transform: uppercase; font-weight:bold; }
         .card-stat span { display: block; font-size: 1.2em; color: #333; font-weight: 800; font-family: 'Consolas', monospace;}
 
-        /* FOOTER (GÜNCELLENDİ: 5 KOLON) */
+        /* --- ÖZEL INPUT TASARIMI (YEŞİL / GRİ) --- */
+        .price-wrapper {
+            position: relative;
+            width: 90%;
+            margin: 0 auto;
+        }
+        
+        .price-input-styled {
+            width: 100%;
+            padding: 8px 30px 8px 10px; /* Sağdan boşluk TL ikonu için */
+            border: 1px solid #ccc; /* Kenarlık eklendi */
+            border-radius: 6px;
+            text-align: right;
+            font-family: 'Consolas', monospace;
+            font-size: 1.1em;
+            background-color: #f9f9f9; /* Gri arka plan */
+            color: #ccc; /* Gri yazı */
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        .price-input-styled.filled {
+            background-color: #d1e7dd; /* Açık yeşil */
+            color: #0f5132; /* Koyu yeşil yazı */
+            font-weight: 900;
+            border-color: #badbcc;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #ccc;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .price-input-styled.filled + .currency-symbol {
+            color: #0f5132;
+        }
+
+        .row-disabled { opacity: 0.4; background-color: #f9f9f9; }
+        .row-select { width: 18px; height: 18px; cursor: pointer; }
+        .del-cell { color: #dc3545; cursor: pointer; font-weight: bold; font-size: 1.2em; text-align: center; }
+
+        /* FOOTER */
         .footer {
             background: var(--dark-footer); 
             border-top: 1px solid #4b545c; 
             padding: 20px 40px; 
             display: grid; 
-            grid-template-columns: repeat(5, 1fr); /* 4'ten 5'e çıkarıldı */
+            grid-template-columns: repeat(5, 1fr); 
             gap: 20px; 
             z-index: 20; 
             height: 110px; 
@@ -212,11 +269,26 @@
 
         .drag-handle { cursor: grab; color: #aaa; font-size: 1.2em; width: 30px; user-select: none; }
         .dragging { opacity: 0.5; background-color: #f0f0f0; border: 2px dashed #999; }
-        
-        .price-input { width: 85%; text-align: right; border: 1px solid #e0e0e0; padding: 6px; border-radius: 4px; color: #333; background: white; font-family: 'Consolas', monospace; }
-        .row-disabled { opacity: 0.4; background-color: #f9f9f9; }
-        .row-select { width: 18px; height: 18px; cursor: pointer; }
-        .del-cell { color: #dc3545; cursor: pointer; font-weight: bold; font-size: 1.2em; text-align: center; }
+
+        /* --- RESPONSIVE CSS --- */
+        @media screen and (max-width: 900px) {
+            body { flex-direction: column; height: auto; overflow-y: auto; }
+            .sidebar { width: 100%; min-width: 100%; height: auto; border-right: none; border-bottom: 4px solid var(--primary); position: relative; }
+            .scroll-y { max-height: 250px; border-bottom: 1px solid #ddd; }
+            .summary-box { height: auto; flex-direction: row; justify-content: space-around; align-items: center; padding: 15px; }
+            .main { width: 100%; height: auto; overflow: visible; }
+            .content { padding: 10px; overflow: visible; }
+            .top-bar { flex-direction: column; gap: 10px; text-align: center; }
+            .footer { grid-template-columns: 1fr 1fr; height: auto; padding: 15px; }
+            .footer .kpi:last-child { grid-column: span 2; }
+            .card-footer-summary { flex-direction: column; gap: 10px; text-align: center; align-items: center; }
+            .card-stat { border-left: none; border-bottom: 2px solid var(--secondary); padding-bottom: 5px; padding-left: 0; width: 100%; text-align: center; }
+        }
+        @media screen and (max-width: 480px) {
+            .footer { grid-template-columns: 1fr; }
+            .footer .kpi:last-child { grid-column: auto; }
+            .kpi div { font-size: 1.2em; }
+        }
 
     </style>
 </head>
@@ -284,25 +356,27 @@
                 </div>
                 <small style="font-weight:normal; opacity:0.9;">Fiyat x Çarpan (Kademeye Göre)</small>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th width="30"></th>
-                        <th width="30">Seç</th>
-                        <th width="15%" style="text-align:left; padding-left:10px;">MALZEME ADI</th>
-                        <th width="10%">HEDEF KADEME</th>
-                        <th width="10%">REF. BİRİM FİYAT</th>
-                        <th class="col-range">Lab Dağalımı (4/1) 1-250<br><span class="multiplier-badge">x6 Adet</span></th>
-                        <th class="col-range">Lab Dağalımı (4/2) 251-500<br><span class="multiplier-badge">x12 Adet</span></th>
-                        <th class="col-range">Lab Dağalımı (4/3) 501-1000<br><span class="multiplier-badge">x18 Adet</span></th>
-                        <th class="col-range">Lab Dağalımı (4/4) 1000+<br><span class="multiplier-badge">x24 Adet</span></th>
-                        <th class="custom-col" width="10%">ÖZEL<br><small>Adet & Fiyat</small></th>
-                        <th width="10%">TOPLAM</th>
-                        <th width="30"></th>
-                    </tr>
-                </thead>
-                <tbody id="bodyMaterials" class="sortable-list"></tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30"></th>
+                            <th width="30">Seç</th>
+                            <th width="15%" style="text-align:left; padding-left:10px;">MALZEME ADI</th>
+                            <th width="10%">HEDEF KADEME</th>
+                            <th width="10%">REF. BİRİM FİYAT</th>
+                            <th class="col-range">Lab Dağalımı (4/1) 1-250<br><span class="multiplier-badge">x6 Adet</span></th>
+                            <th class="col-range">Lab Dağalımı (4/2) 251-500<br><span class="multiplier-badge">x12 Adet</span></th>
+                            <th class="col-range">Lab Dağalımı (4/3) 501-1000<br><span class="multiplier-badge">x18 Adet</span></th>
+                            <th class="col-range">Lab Dağalımı (4/4) 1000+<br><span class="multiplier-badge">x24 Adet</span></th>
+                            <th class="custom-col" width="10%">ÖZEL<br><small>Adet & Fiyat</small></th>
+                            <th width="10%">TOPLAM</th>
+                            <th width="30"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyMaterials" class="sortable-list"></tbody>
+                </table>
+            </div>
             <div class="card-footer-summary">
                 <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_materials">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_materials">0 ₺</span></div>
@@ -317,25 +391,27 @@
                 </div>
                 <small style="font-weight:normal; opacity:0.9;">Maksimum 6 Adet Seçilebilir</small>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th width="30"></th>
-                        <th width="30">Seç</th>
-                        <th width="15%" style="text-align:left; padding-left:10px;">PROJE ADI</th>
-                        <th width="10%">HEDEF KADEME</th>
-                        <th width="10%">REF. BİRİM FİYAT</th>
-                        <th class="col-range">Lab Dağalımı (18) 1-250<br><span class="multiplier-badge">x3 Adet</span></th>
-                        <th class="col-range">Lab Dağalımı (36) 251-500<br><span class="multiplier-badge">x6 Adet</span></th>
-                        <th class="col-range">Lab Dağalımı (54) 501-1000<br><span class="multiplier-badge">x9 Adet</span></th>
-                        <th class="col-range">Lab Dağalımı (72) 1000+<br><span class="multiplier-badge">x12 Adet</span></th>
-                        <th class="custom-col" width="10%">ÖZEL<br><small>Adet & Fiyat</small></th>
-                        <th width="10%">TOPLAM</th>
-                        <th width="30"></th>
-                    </tr>
-                </thead>
-                <tbody id="bodyProjects" class="sortable-list"></tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30"></th>
+                            <th width="30">Seç</th>
+                            <th width="15%" style="text-align:left; padding-left:10px;">PROJE ADI</th>
+                            <th width="10%">HEDEF KADEME</th>
+                            <th width="10%">REF. BİRİM FİYAT</th>
+                            <th class="col-range">Lab Dağalımı (18) 1-250<br><span class="multiplier-badge">x3 Adet</span></th>
+                            <th class="col-range">Lab Dağalımı (36) 251-500<br><span class="multiplier-badge">x6 Adet</span></th>
+                            <th class="col-range">Lab Dağalımı (54) 501-1000<br><span class="multiplier-badge">x9 Adet</span></th>
+                            <th class="col-range">Lab Dağalımı (72) 1000+<br><span class="multiplier-badge">x12 Adet</span></th>
+                            <th class="custom-col" width="10%">ÖZEL<br><small>Adet & Fiyat</small></th>
+                            <th width="10%">TOPLAM</th>
+                            <th width="30"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyProjects" class="sortable-list"></tbody>
+                </table>
+            </div>
             <div class="card-footer-summary">
                 <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_projects">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_projects">0 ₺</span></div>
@@ -346,23 +422,24 @@
             <div class="card-header">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <span>📦 BİREYSEL MALZEME</span>
-                    <button class="btn-add" onclick="addNewRow('individual')">+ Ekle</button>
-                </div>
+                    </div>
                 <small style="font-weight:normal; opacity:0.9;">Kısıtlama: 1-2. Sınıf (Max 4), 3-4. Sınıf (Max 3)</small>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th width="30"></th>
-                        <th width="30">Seç</th>
-                        <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
-                        <th width="15%">BİRİM FİYAT</th>
-                        <th width="20%">TOPLAM TUTAR</th>
-                        <th width="30"></th>
-                    </tr>
-                </thead>
-                <tbody id="bodyIndividual" class="sortable-list"></tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30"></th>
+                            <th width="30">Seç</th>
+                            <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
+                            <th width="15%">BİRİM FİYAT</th>
+                            <th width="10%">ADET</th> <th width="20%">TOPLAM TUTAR</th>
+                            <th width="30"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyIndividual" class="sortable-list"></tbody>
+                </table>
+            </div>
             <div class="card-footer-summary">
                 <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_individual">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_individual">0 ₺</span></div>
@@ -373,24 +450,26 @@
             <div class="card-header header-extra">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <span>🧪 DENEY SETLERİ SEÇİMİ</span>
-                    <button class="btn-add" onclick="addNewRow('experimentSets')">+ Ekle</button>
+                    <!--<button class="btn-add" onclick="addNewRow('experimentSets')">+ Ekle</button>-->
                 </div>
                 <small style="font-weight:normal; opacity:0.9;">Fiyat x Adet (Ana Ortalamaya Katılmaz)</small>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th width="30"></th>
-                        <th width="30">Seç</th>
-                        <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
-                        <th width="15%">BİRİM FİYAT</th>
-                        <th width="15%">ADET</th>
-                        <th width="20%">TOPLAM TUTAR</th>
-                        <th width="30"></th>
-                    </tr>
-                </thead>
-                <tbody id="bodyExperimentSets" class="sortable-list"></tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30"></th>
+                            <th width="30">Seç</th>
+                            <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
+                            <th width="15%">BİRİM FİYAT</th>
+                            <th width="15%">ADET</th>
+                            <th width="20%">TOPLAM TUTAR</th>
+                            <th width="30"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyExperimentSets" class="sortable-list"></tbody>
+                </table>
+            </div>
             <div class="card-footer-summary">
                 <div class="card-stat" style="border-left-color: var(--extra-color);"><small>Setler Toplamı</small><span id="sum_experiments">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Ortalama (Adet Başı)</small><span id="avg_experiments">0 ₺</span></div>
@@ -401,24 +480,26 @@
             <div class="card-header header-extra">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <span>🧸 OKUL ÖNCESİ YAYIN KUTULARI</span>
-                    <button class="btn-add" onclick="addNewRow('preschoolBoxes')">+ Ekle</button>
+                    <!--<button class="btn-add" onclick="addNewRow('preschoolBoxes')">+ Ekle</button>-->
                 </div>
                 <small style="font-weight:normal; opacity:0.9;">Adet Manuel Girilir (Ana Ortalamaya Katılmaz)</small>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th width="30"></th>
-                        <th width="30">Seç</th>
-                        <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
-                        <th width="15%">BİRİM FİYAT</th>
-                        <th width="15%">ADET (Manuel)</th>
-                        <th width="20%">TOPLAM TUTAR</th>
-                        <th width="30"></th>
-                    </tr>
-                </thead>
-                <tbody id="bodyPreschoolBoxes" class="sortable-list"></tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30"></th>
+                            <th width="30">Seç</th>
+                            <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
+                            <th width="15%">BİRİM FİYAT</th>
+                            <th width="15%">ADET (Manuel)</th>
+                            <th width="20%">TOPLAM TUTAR</th>
+                            <th width="30"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyPreschoolBoxes" class="sortable-list"></tbody>
+                </table>
+            </div>
             <div class="card-footer-summary">
                 <div class="card-stat" style="border-left-color: var(--extra-color);"><small>Kutular Toplamı</small><span id="sum_preschool">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Ortalama (Adet Başı)</small><span id="avg_preschool">0 ₺</span></div>
@@ -429,24 +510,26 @@
             <div class="card-header header-master-plus">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <span>💎 PLUS HİZMET PAKETİ (SADECE MASTER)</span>
-                    <button class="btn-add" style="background:#856404;" onclick="addNewRow('plusServices')">+ Ekle</button>
+                    <!--<button class="btn-add" style="background:#856404;" onclick="addNewRow('plusServices')">+ Ekle</button>-->
                 </div>
-                <small style="font-weight:normal; opacity:1;">Sadece Master Paket'e Eklenir | Adet = Toplam Öğrenci Sayısı</small>
+                <small style="font-weight:normal; opacity:1;">Sadece Master Paket'e Öğrenci Başı Ücret Eklenir ! | Adet = Toplam Öğrenci Sayısı</small>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th width="30"></th>
-                        <th width="30">Seç</th>
-                        <th width="40%" style="text-align:left; padding-left:15px;">HİZMET ADI</th>
-                        <th width="15%">ÖĞR. BAŞI FİYAT</th>
-                        <th width="15%">TOPLAM ADET (Oto)</th>
-                        <th width="20%">TOPLAM TUTAR</th>
-                        <th width="30"></th>
-                    </tr>
-                </thead>
-                <tbody id="bodyPlusServices" class="sortable-list"></tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="30"></th>
+                            <th width="30">Seç</th>
+                            <th width="40%" style="text-align:left; padding-left:15px;">HİZMET ADI</th>
+                            <th width="15%">BİRİM FİYAT</th>
+                            <th width="15%">TOPLAM ADET (Oto)</th>
+                            <th width="20%">TOPLAM TUTAR</th>
+                            <th width="30"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyPlusServices" class="sortable-list"></tbody>
+                </table>
+            </div>
             <div class="card-footer-summary" style="background-color: #fff3cd;">
                 <div class="card-stat" style="border-left-color: var(--master-color);"><small>Plus Hizmet Toplamı</small><span id="sum_plus">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Ortalama (Öğr. Başı)</small><span id="avg_plus">0 ₺</span></div>
@@ -485,7 +568,7 @@
         const DEVELOPER_INFO = Object.freeze({
             name: "Bahadır Çalışkan", 
             contact: "Yazılım Geliştirici", 
-            version: "v27.0",
+            version: "v30.0",
             copyright: "© 2025 Bahadır Çalışkan - Tüm Hakları Saklıdır",
             message: "Bu yazılım mimarisi ve kod yapısı Bahadır Çalışkan tarafından tasarlanmıştır."
         });
@@ -516,58 +599,58 @@
     // --- VERİ TABANLARI ---
 
     const dbProjects = [
-        { name: "AKILLI ARABA", price: 0, level: 'all' },
-        { name: "HACİM ÖLÇER", price: 0, level: 'all' },
-        { name: "DİNAMOMETRE", price: 0, level: 'all' },
-        { name: "AKILLI KUŞ EVİ", price: 0, level: 'all' },
-        { name: "MÜCEVHER KORUMA", price: 0, level: 'all' },
-        { name: "AKILLI KUMBARA", price: 0, level: 'all' },
-        { name: "AKILLI EV", price: 0, level: 'all' },
-        { name: "AKILLI SERA", price: 0, level: 'all' }
+        { name: "Akıllı Araba", price: 2500, level: 'mid' },
+        { name: "Hacim Ölçer", price: 2500, level: 'mid' },
+        { name: "Dinamometre", price: 2500, level: 'mid' },
+        { name: "Akıllı Kuş Evi", price: 2500, level: 'mid' },
+        { name: "Mücevher Koruma", price: 2500, level: 'mid' },
+        { name: "Akıllı Kumbara", price: 2500, level: 'mid' },
+        { name: "Akıllı Ev", price: 2500, level: 'mid' },
+        { name: "Akıllı Sera", price: 2500, level: 'mid' }
     ];
 
     const dbMaterials = [
-        { name: "TURP", price: 0, level: 'pre' }, 
-        { name: "KÜMÜLÜS", price: 0, level: 'pri' }, 
-        { name: "KIRMIZI KUTU", price: 0, level: 'mid' },
-        { name: "SİYAH KUTU", price: 0, level: 'high' },
+        { name: "Turp", price: 1750, level: 'pre' }, 
+        { name: "Kümülüs", price: 2000, level: 'pri' }, 
+        { name: "Kırmızı Kutu", price: 2500, level: 'mid' },
+        { name: "Siyah Kutu", price: 3000, level: 'high' },
         { name: "Micro:Bit", price: 0, level: 'pri' },
         { name: "Raspberry Pi", price: 0, level: 'high' },
         { name: "Bee-Bot", price: 0, level: 'pre' },
         { name: "Cubetto Robot", price: 0, level: 'pre' },
         { name: "Mbot Robot", price: 0, level: 'mid' },
-        { name: "3B Yazıcı Filament", price: 500, level : 'all' }
+        { name: "3B Yazıcı Filament", price: 0, level : 'all' }
     ];
 
     const dbIndividual = [
         // 1. Sınıf
-        { name: "1.SINIF Fungrid Kodlama Kitabı", price: 0, targetClass: "s1" },
-        { name: "1.SINIF Telefon Yapalım", price: 0, targetClass: "s1" },
-        { name: "1.SINIF Helikopter Yapalım", price: 0, targetClass: "s1" },
-        { name: "1.SINIF Örümcek Yapalım", price: 0, targetClass: "s1" },
-        { name: "1.SINIF Kelebekler ve Arılar", price: 0, targetClass: "s1" },
-        { name: "1.SINIF İzlerimi Takip Et", price: 0, targetClass: "s1" },
+        { name: "1.SINIF Fungrid Kodlama Kitabı", price: 175, targetClass: "s1" },
+        { name: "1.SINIF Telefon Yapalım", price: 175, targetClass: "s1" },
+        { name: "1.SINIF Helikopter Yapalım", price: 175, targetClass: "s1" },
+        { name: "1.SINIF Örümcek Yapalım", price: 175, targetClass: "s1" },
+        { name: "1.SINIF Kelebekler ve Arılar", price: 175, targetClass: "s1" },
+        { name: "1.SINIF İzlerimi Takip Et", price: 175, targetClass: "s1" },
 
         // 2. Sınıf
-        { name: "2.SINIF Fungrid Kodlama Kitabı", price: 0, targetClass: "s2" },
-        { name: "2.SINIF Radyo Yapalım", price: 0, targetClass: "s2" },
-        { name: "2.SINIF Uzay Uydusu Yapalım", price: 0, targetClass: "s2" },
-        { name: "2.SINIF Uçak Yapalım", price: 0, targetClass: "s2" },
-        { name: "2.SINIF Saat Kaç?", price: 0, targetClass: "s2" },
+        { name: "2.SINIF Fungrid Kodlama Kitabı", price: 175, targetClass: "s2" },
+        { name: "2.SINIF Radyo Yapalım", price: 175, targetClass: "s2" },
+        { name: "2.SINIF Uzay Uydusu Yapalım", price: 175, targetClass: "s2" },
+        { name: "2.SINIF Uçak Yapalım", price: 175, targetClass: "s2" },
+        { name: "2.SINIF Saat Kaç?", price: 175, targetClass: "s2" },
 
         // 3. Sınıf
-        { name: "3.SINIF Elektrik Süpürgesi", price: 0, targetClass: "s3" },
-        { name: "3.SINIF Trafik Lambası", price: 0, targetClass: "s3" },
-        { name: "3.SINIF Rüzgar Türbini", price: 0, targetClass: "s3" },
-        { name: "3.SINIF Meslekler", price: 0, targetClass: "s3" },
-        { name: "3.SINIF Origamik kıyafetlerim Meslekler", price: 0, targetClass: "s3" },
+        { name: "3.SINIF Elektrik Süpürgesi", price: 200, targetClass: "s3" },
+        { name: "3.SINIF Trafik Lambası", price: 200, targetClass: "s3" },
+        { name: "3.SINIF Rüzgar Türbini", price: 200, targetClass: "s3" },
+        { name: "3.SINIF Meslekler", price: 200, targetClass: "s3" },
+        { name: "3.SINIF Origamik kıyafetlerim Meslekler", price: 200, targetClass: "s3" },
 
         // 4. Sınıf
-        { name: "4.SINIF Mors Kod", price: 0, targetClass: "s4" },
-        { name: "4.SINIF Asansör Projesi", price: 0, targetClass: "s4" },
-        { name: "4.SINIF Yüzük Projesi", price: 0, targetClass: "s4" },
-        { name: "4.SINIF Ayın Evreleri", price: 0, targetClass: "s4" },
-        { name: "4.SINIF Geri Dönüşüm", price: 0, targetClass: "s4" }
+        { name: "4.SINIF Mors Kod", price: 200, targetClass: "s4" },
+        { name: "4.SINIF Asansör Projesi", price: 200, targetClass: "s4" },
+        { name: "4.SINIF Yüzük Projesi", price: 200, targetClass: "s4" },
+        { name: "4.SINIF Ayın Evreleri", price: 200, targetClass: "s4" },
+        { name: "4.SINIF Geri Dönüşüm", price: 200, targetClass: "s4" }
     ];
 
     // Yeni Veri Setleri
@@ -610,7 +693,7 @@
     ];
 
     let counts = {}; 
-    const STORAGE_KEY = 'teklifSistemiV27_Data'; // v27
+    const STORAGE_KEY = 'teklifSistemiV30_Data'; // v30
 
     window.onload = function() {
         if(!loadFromLocal()) {
@@ -670,7 +753,7 @@
             rows.push({
                 name: row.querySelector('.inp-flat').value,
                 checked: row.querySelector('.row-select').checked,
-                price: row.querySelector('.ind-price').value,
+                price: row.querySelector('.ind-price').value, // .price-input-styled class'ını da okur çünkü classList'te var
                 target: row.getAttribute('data-target')
             });
         });
@@ -758,12 +841,19 @@
                     tb.insertAdjacentHTML('beforeend', createSimpleRow('plusServices', item.name, item.price, item.qty, item.checked));
                 });
             }
+            
+            // Tüm inputların stilini güncelle
+            updateAllInputStyles();
 
             return true;
         } catch(e) {
             console.error("Save dosyası okunamadı", e);
             return false;
         }
+    }
+
+    function updateAllInputStyles() {
+        document.querySelectorAll('.price-input-styled').forEach(inp => stylePriceInput(inp));
     }
 
     function resetData() {
@@ -776,28 +866,40 @@
     function renderTables() {
         const tbProj = document.getElementById("bodyProjects");
         dbProjects.forEach((p, index) => {
-            tbProj.insertAdjacentHTML('beforeend', createMatrixRow('projects', p.name, p.price, p.level, index === 0));
+            tbProj.insertAdjacentHTML('beforeend', createMatrixRow('projects', p.name, p.price, p.level, false));
         });
         const tbMat = document.getElementById("bodyMaterials");
         dbMaterials.forEach((m, index) => {
-            tbMat.insertAdjacentHTML('beforeend', createMatrixRow('materials', m.name, m.price, m.level, index === 0));
+            tbMat.insertAdjacentHTML('beforeend', createMatrixRow('materials', m.name, m.price, m.level, false));
         });
         const tbInd = document.getElementById("bodyIndividual");
         dbIndividual.forEach((i, index) => {
-            tbInd.insertAdjacentHTML('beforeend', createIndividualRow(i.name, i.price, i.targetClass, 0, index === 0));
+            tbInd.insertAdjacentHTML('beforeend', createIndividualRow(i.name, i.price, i.targetClass, 0, false));
         });
         const tbExp = document.getElementById("bodyExperimentSets");
         dbExperiments.forEach((e, index) => {
-            tbExp.insertAdjacentHTML('beforeend', createSimpleRow('experimentSets', e.name, e.price, 0, index < 5));
+            tbExp.insertAdjacentHTML('beforeend', createSimpleRow('experimentSets', e.name, e.price, 0, false));
         });
         const tbPre = document.getElementById("bodyPreschoolBoxes");
         dbPreschool.forEach((p, index) => {
-            tbPre.insertAdjacentHTML('beforeend', createSimpleRow('preschoolBoxes', p.name, p.price, 0, index === 0));
+            tbPre.insertAdjacentHTML('beforeend', createSimpleRow('preschoolBoxes', p.name, p.price, 0, false));
         });
         const tbPlus = document.getElementById("bodyPlusServices");
         dbPlusServices.forEach((p, index) => {
             tbPlus.insertAdjacentHTML('beforeend', createSimpleRow('plusServices', p.name, p.price, 0, false));
         });
+        
+        updateAllInputStyles();
+    }
+
+    // --- YENİ TASARIMLI INPUT HESAPLAMA VE STİL FONKSİYONU ---
+    function stylePriceInput(input) {
+        let val = parseFloat(input.value);
+        if(val > 0) {
+            input.classList.add('filled');
+        } else {
+            input.classList.remove('filled');
+        }
     }
 
     function createMatrixRow(type, name, refPrice, level, isChecked) {
@@ -830,13 +932,26 @@
         </tr>`;
     }
 
+    // --- GÜNCELLENMİŞ HTML OLUŞTURUCULAR (WRAPPER İLE) ---
+
     function createIndividualRow(name, price, target, qtyVal, isChecked) {
         let checkAttr = isChecked ? 'checked' : '';
         return `<tr data-target="${target || 'manual'}" draggable="true">
             <td class="drag-handle">☰</td>
             <td><input type="checkbox" class="row-select" ${checkAttr} onchange="handleCheck(this, 'individual')"></td>
             <td><input class="inp-flat" value="${name}" placeholder="Ürün Adı" oninput="saveToLocal()"></td>
-            <td><input type="number" min="0" class="price-input ind-price" value="${price}" oninput="calculateAll()"></td>
+            <td>
+                <div class="price-wrapper">
+                    <input type="number" min="0" class="price-input-styled ind-price" value="${price}" 
+                           oninput="stylePriceInput(this); calculateAll()">
+                    <span class="currency-symbol">₺</span>
+                </div>
+            </td>
+            <td>
+                <input type="text" class="form-control ind-qty-display" readonly
+                       style="background: transparent; border: none; text-align: center; font-weight: bold; width: 100%; font-size:1.1em; color:#333;"
+                       value="0">
+            </td>
             <td class="row-total ind-total">0 ₺</td>
             <td class="del-cell" onclick="delRow(this)">×</td>
         </tr>`;
@@ -846,15 +961,19 @@
         let checkAttr = isChecked ? 'checked' : '';
         let isPreschoolBox = (type === 'preschoolBoxes');
         let isPlusService = (type === 'plusServices');
-        
-        // Plus Hizmet ise adet kilitli (Otomatik Toplam Öğrenci), diğerleri (Kutular & Setler) serbest manuel
         let qtyAttr = isPlusService ? 'readonly style="background:#eee;"' : '';
         
         return `<tr draggable="true" data-simple-type="${type}">
             <td class="drag-handle">☰</td>
             <td><input type="checkbox" class="row-select" ${checkAttr} onchange="calculateAll()"></td>
             <td><input class="inp-flat" value="${name}" placeholder="Ürün Adı" oninput="saveToLocal()"></td>
-            <td><input type="number" min="0" class="price-input simple-price" value="${price}" oninput="calculateAll()"></td>
+            <td>
+                <div class="price-wrapper">
+                    <input type="number" min="0" class="price-input-styled simple-price" value="${price}" 
+                           oninput="stylePriceInput(this); calculateAll()">
+                    <span class="currency-symbol">₺</span>
+                </div>
+            </td>
             <td>
                 <input type="number" min="0" class="qty-input simple-qty" value="${qtyVal}" ${qtyAttr} oninput="calculateAll()">
             </td>
@@ -932,6 +1051,12 @@
             rowHtml = createSimpleRow('plusServices', 'Ek Master Hizmet', 0, 0, true);
         }
         document.getElementById(containerId).insertAdjacentHTML('beforeend', rowHtml);
+        
+        // Yeni eklenen satırın input stilini kontrol et
+        const newRow = document.getElementById(containerId).lastElementChild;
+        const styledInput = newRow.querySelector('.price-input-styled');
+        if(styledInput) stylePriceInput(styledInput);
+
         calculateAll(true);
     }
 
@@ -1095,6 +1220,17 @@
         // --- BİREYSEL HESAPLAMA ---
         let indSubTotal = 0;
         document.querySelectorAll('#bodyIndividual tr').forEach(row => {
+            
+            // ADET GÜNCELLEMESİ (BURASI YENİ)
+            let target = row.getAttribute('data-target');
+            let qty = 0;
+            if(target && counts[target] !== undefined) {
+                qty = counts[target];
+            }
+            // Tablodaki göstergeyi güncelle
+            let qtyDisplay = row.querySelector('.ind-qty-display');
+            if(qtyDisplay) qtyDisplay.value = qty;
+
             let isChecked = row.querySelector('.row-select').checked;
             if(!isChecked) {
                 row.classList.add('row-disabled');
@@ -1106,20 +1242,14 @@
             if(pInput.value < 0) pInput.value = 0;
             let price = parseFloat(pInput.value) || 0;
             
-            // Adet Otomatik
-            let target = row.getAttribute('data-target');
-            let qty = 0;
-            if(target && counts[target] !== undefined) {
-                qty = counts[target];
-            }
             let tot = price * qty;
             row.querySelector('.ind-total').innerText = fmt(tot);
             indSubTotal += tot;
         });
 
-        // --- SET HESAPLAMA (DÜZELTİLDİ: Kendi Adet Toplamına Bölünecek) ---
+        // --- SET HESAPLAMA ---
         let expSubTotal = 0;
-        let expTotalQty = 0; // Yeni: Sadece bu bölümdeki adetlerin toplamı
+        let expTotalQty = 0; 
         document.querySelectorAll('#bodyExperimentSets tr').forEach(row => {
             let isChecked = row.querySelector('.row-select').checked;
             if(!isChecked) { row.classList.add('row-disabled'); row.querySelector('.simple-total').innerText = fmt(0); return; }
@@ -1129,12 +1259,12 @@
             let tot = price * qty;
             row.querySelector('.simple-total').innerText = fmt(tot);
             expSubTotal += tot;
-            expTotalQty += qty; // Adeti topla
+            expTotalQty += qty;
         });
 
-        // --- KUTU HESAPLAMA (DÜZELTİLDİ: Kendi Adet Toplamına Bölünecek) ---
+        // --- KUTU HESAPLAMA ---
         let preBoxSubTotal = 0;
-        let preBoxTotalQty = 0; // Yeni: Sadece bu bölümdeki adetlerin toplamı
+        let preBoxTotalQty = 0; 
         document.querySelectorAll('#bodyPreschoolBoxes tr').forEach(row => {
             let isChecked = row.querySelector('.row-select').checked;
             if(!isChecked) { row.classList.add('row-disabled'); row.querySelector('.simple-total').innerText = fmt(0); return; }
@@ -1144,10 +1274,10 @@
             let tot = price * qty;
             row.querySelector('.simple-total').innerText = fmt(tot);
             preBoxSubTotal += tot;
-            preBoxTotalQty += qty; // Adeti topla
+            preBoxTotalQty += qty;
         });
 
-        // --- PLUS HİZMET (DÜZELTİLDİ: Kendi Adet Toplamına Bölünecek) ---
+        // --- PLUS HİZMET ---
         let plusServicesTotal = 0; 
         let plusServicesQty = 0;
         document.querySelectorAll('#bodyPlusServices tr').forEach(row => {
@@ -1199,7 +1329,7 @@
         let extraTotal = expSubTotal + preBoxSubTotal;
         document.getElementById("valExtraTotal").innerText = fmt(extraTotal);
         
-        // YENİ EKSTRA ORTALAMA HESABI (SETLER + KUTULAR)
+        // EKSTRA ORTALAMA HESABI
         let totalExtraQty = expTotalQty + preBoxTotalQty;
         let extraAvg = totalExtraQty > 0 ? (extraTotal / totalExtraQty) : 0;
         document.getElementById("valExtraAvg").innerText = fmt(extraAvg);
