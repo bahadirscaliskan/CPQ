@@ -378,7 +378,7 @@
                 </table>
             </div>
             <div class="card-footer-summary">
-                <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_materials">0 ₺</span></div>
+                <div class="card-stat"><small>Lab Malzeme Toplamı</small><span id="sum_materials">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_materials">0 ₺</span></div>
             </div>
         </div>
@@ -413,7 +413,7 @@
                 </table>
             </div>
             <div class="card-footer-summary">
-                <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_projects">0 ₺</span></div>
+                <div class="card-stat"><small>Lab Proje Toplamı</small><span id="sum_projects">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_projects">0 ₺</span></div>
             </div>
         </div>
@@ -421,7 +421,7 @@
         <div class="card">
             <div class="card-header">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <span>📦 BİREYSEL MALZEME</span>
+                    <span>📦 BİREYSEL MALZEME SEÇİMİ</span>
                     </div>
                 <small style="font-weight:normal; opacity:0.9;">Kısıtlama: 1-2. Sınıf (Max 4), 3-4. Sınıf (Max 3)</small>
             </div>
@@ -441,7 +441,7 @@
                 </table>
             </div>
             <div class="card-footer-summary">
-                <div class="card-stat"><small>Bu Bölüm Toplamı</small><span id="sum_individual">0 ₺</span></div>
+                <div class="card-stat"><small>Bireysel Malzeme Toplamı</small><span id="sum_individual">0 ₺</span></div>
                 <div class="card-stat" style="border-left-color: #28a745;"><small>Öğrenci Başı Ort.</small><span id="avg_individual">0 ₺</span></div>
             </div>
         </div>
@@ -452,7 +452,7 @@
                     <span>🧪 DENEY SETLERİ SEÇİMİ</span>
                     <!--<button class="btn-add" onclick="addNewRow('experimentSets')">+ Ekle</button>-->
                 </div>
-                <small style="font-weight:normal; opacity:0.9;">Fiyat x Adet (Ana Ortalamaya Katılmaz)</small>
+                <small style="font-weight:normal; opacity:0.9;">Adet Manuel Girilir  (Ana Ortalamaya Katılmaz)</small>
             </div>
             <div class="table-responsive">
                 <table>
@@ -462,7 +462,7 @@
                             <th width="30">Seç</th>
                             <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
                             <th width="15%">BİRİM FİYAT</th>
-                            <th width="15%">ADET</th>
+                            <th width="15%">ADET (Manuel)</th>
                             <th width="20%">TOPLAM TUTAR</th>
                             <th width="30"></th>
                         </tr>
@@ -479,7 +479,7 @@
         <div class="card">
             <div class="card-header header-extra">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <span>🧸 OKUL ÖNCESİ YAYIN KUTULARI</span>
+                    <span>🧸 OKUL ÖNCESİ KUTU SEÇİMİ</span>
                     <!--<button class="btn-add" onclick="addNewRow('preschoolBoxes')">+ Ekle</button>-->
                 </div>
                 <small style="font-weight:normal; opacity:0.9;">Adet Manuel Girilir (Ana Ortalamaya Katılmaz)</small>
@@ -509,7 +509,7 @@
         <div class="card" style="border: 2px solid var(--master-color);">
             <div class="card-header header-master-plus">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <span>💎 PLUS HİZMET PAKETİ (SADECE MASTER)</span>
+                    <span>💎 PLUS HİZMET PAKETİ SEÇİMİ (SADECE MASTER)</span>
                     <!--<button class="btn-add" style="background:#856404;" onclick="addNewRow('plusServices')">+ Ekle</button>-->
                 </div>
                 <small style="font-weight:normal; opacity:1;">Sadece Master Paket'e Öğrenci Başı Ücret Eklenir ! | Adet = Toplam Öğrenci Sayısı</small>
@@ -522,7 +522,7 @@
                             <th width="30">Seç</th>
                             <th width="40%" style="text-align:left; padding-left:15px;">HİZMET ADI</th>
                             <th width="15%">BİRİM FİYAT</th>
-                            <th width="15%">TOPLAM ADET (Oto)</th>
+                            <th width="15%">ADET</th>
                             <th width="20%">TOPLAM TUTAR</th>
                             <th width="30"></th>
                         </tr>
@@ -614,43 +614,42 @@
         { name: "Kümülüs", price: 2000, level: 'pri' }, 
         { name: "Kırmızı Kutu", price: 2500, level: 'mid' },
         { name: "Siyah Kutu", price: 3000, level: 'high' },
-        { name: "Micro:Bit", price: 0, level: 'pri' },
-        { name: "Raspberry Pi", price: 0, level: 'high' },
-        { name: "Bee-Bot", price: 0, level: 'pre' },
-        { name: "Cubetto Robot", price: 0, level: 'pre' },
-        { name: "Mbot Robot", price: 0, level: 'mid' },
+        { name: "Micro:Bit", price: 0, level: 'all' },
+        { name: "Raspberry Pi", price: 0, level: 'all' },
+        { name: "Bee-Bot", price: 0, level: 'all' },
+        { name: "Cubetto Robot", price: 0, level: 'all' },
+        { name: "Mbot Robot", price: 0, level: 'all' },
         { name: "3B Yazıcı Filament", price: 0, level : 'all' }
     ];
 
     const dbIndividual = [
         // 1. Sınıf
-        { name: "1.SINIF Fungrid Kodlama Kitabı", price: 175, targetClass: "s1" },
-        { name: "1.SINIF Telefon Yapalım", price: 175, targetClass: "s1" },
-        { name: "1.SINIF Helikopter Yapalım", price: 175, targetClass: "s1" },
-        { name: "1.SINIF Örümcek Yapalım", price: 175, targetClass: "s1" },
-        { name: "1.SINIF Kelebekler ve Arılar", price: 175, targetClass: "s1" },
-        { name: "1.SINIF İzlerimi Takip Et", price: 175, targetClass: "s1" },
+        { name: "1.SINIF - Fungrid Kodlama Kitabı", price: 175, targetClass: "s1" },
+        { name: "1.SINIF - Telefon Yapalım", price: 175, targetClass: "s1" },
+        { name: "1.SINIF - Helikopter Yapalım", price: 175, targetClass: "s1" },
+        { name: "1.SINIF - Örümcek Yapalım", price: 175, targetClass: "s1" },
+        { name: "1.SINIF - Kelebekler ve Arılar", price: 175, targetClass: "s1" },
+        { name: "1.SINIF - İzlerimi Takip Et", price: 175, targetClass: "s1" },
 
         // 2. Sınıf
-        { name: "2.SINIF Fungrid Kodlama Kitabı", price: 175, targetClass: "s2" },
-        { name: "2.SINIF Radyo Yapalım", price: 175, targetClass: "s2" },
-        { name: "2.SINIF Uzay Uydusu Yapalım", price: 175, targetClass: "s2" },
-        { name: "2.SINIF Uçak Yapalım", price: 175, targetClass: "s2" },
-        { name: "2.SINIF Saat Kaç?", price: 175, targetClass: "s2" },
-
+        { name: "2.SINIF - Fungrid Kodlama Kitabı", price: 175, targetClass: "s2" },
+        { name: "2.SINIF - Radyo Yapalım", price: 175, targetClass: "s2" },
+        { name: "2.SINIF - Uzay Uydusu Yapalım", price: 175, targetClass: "s2" },
+        { name: "2.SINIF - Uçak Yapalım", price: 175, targetClass: "s2" },
+        { name: "2.SINIF - Saat Kaç?", price: 175, targetClass: "s2" },
         // 3. Sınıf
-        { name: "3.SINIF Elektrik Süpürgesi", price: 200, targetClass: "s3" },
-        { name: "3.SINIF Trafik Lambası", price: 200, targetClass: "s3" },
-        { name: "3.SINIF Rüzgar Türbini", price: 200, targetClass: "s3" },
-        { name: "3.SINIF Meslekler", price: 200, targetClass: "s3" },
-        { name: "3.SINIF Origamik kıyafetlerim Meslekler", price: 200, targetClass: "s3" },
+        { name: "3.SINIF - Elektrik Süpürgesi", price: 200, targetClass: "s3" },
+        { name: "3.SINIF - Trafik Lambası", price: 200, targetClass: "s3" },
+        { name: "3.SINIF - Rüzgar Türbini", price: 200, targetClass: "s3" },
+        { name: "3.SINIF - Meslekler", price: 200, targetClass: "s3" },
+        { name: "3.SINIF - Origamik kıyafetlerim Meslekler", price: 200, targetClass: "s3" },
 
         // 4. Sınıf
-        { name: "4.SINIF Mors Kod", price: 200, targetClass: "s4" },
-        { name: "4.SINIF Asansör Projesi", price: 200, targetClass: "s4" },
-        { name: "4.SINIF Yüzük Projesi", price: 200, targetClass: "s4" },
-        { name: "4.SINIF Ayın Evreleri", price: 200, targetClass: "s4" },
-        { name: "4.SINIF Geri Dönüşüm", price: 200, targetClass: "s4" }
+        { name: "4.SINIF - Mors Kod", price: 200, targetClass: "s4" },
+        { name: "4.SINIF - Asansör Projesi", price: 200, targetClass: "s4" },
+        { name: "4.SINIF - Yüzük Projesi", price: 200, targetClass: "s4" },
+        { name: "4.SINIF - Ayın Evreleri", price: 200, targetClass: "s4" },
+        { name: "4.SINIF - Geri Dönüşüm", price: 200, targetClass: "s4" }
     ];
 
     // Yeni Veri Setleri
