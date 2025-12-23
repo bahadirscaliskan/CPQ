@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kademe Bazlı Teklif Sistemi v30 - Bahadır Çalışkan</title>
+    <title>Teklif Sistemi v30</title>
     <style>
+        /* --- GENEL ARAYÜZ STİLLERİ (DEĞİŞMEDİ) --- */
         :root {
             --primary: #203764;
             --secondary: #4472c4;
@@ -21,313 +22,302 @@
             background-color: var(--bg);
             margin: 0;
             display: flex;
-            height: 100vh;
-            overflow: hidden;
+            height: 100vh; 
+            overflow: hidden; 
             font-size: 13px;
             color: #333;
         }
 
-        /* --- SOL PANEL --- */
-        .sidebar {
-            width: 320px;
-            min-width: 320px;
-            background: white;
-            border-right: 1px solid #dee2e6;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.03);
-            z-index: 10;
-            transition: all 0.3s;
-        }
-
-        .header {
-            background: var(--primary);
-            color: white;
-            padding: 18px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 1.2em;
-        }
-
+        .sidebar { width: 320px; min-width: 320px; background: white; border-right: 1px solid #dee2e6; display: flex; flex-direction: column; box-shadow: 4px 0 10px rgba(0,0,0,0.03); z-index: 10; }
+        .header { background: var(--primary); color: white; padding: 18px; text-align: center; font-weight: 700; font-size: 1.2em; }
         .scroll-y { overflow-y: auto; flex: 1; padding-bottom: 20px; }
-
-        .group-title {
-            background: #e9ecef;
-            color: #495057;
-            padding: 10px 20px;
-            font-weight: 800;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            border-bottom: 1px solid #dee2e6;
-            margin-top: 10px;
+        .group-title { background: #e9ecef; color: #495057; padding: 10px 20px; font-weight: 800; font-size: 0.85em; text-transform: uppercase; border-bottom: 1px solid #dee2e6; margin-top: 10px; }
+        .input-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 20px; border-bottom: 1px solid #f1f3f5; }
+        .qty-input { width: 60px; padding: 6px; text-align: center; border: 1px solid #ced4da; border-radius: 4px; font-weight: bold; color: var(--primary); font-size: 1.1em; }
+        .group-total-row { background: #f1f5f9; color: var(--primary); padding: 6px 20px; font-weight: bold; font-size: 0.9em; text-align: right; border-bottom: 1px solid #dee2e6; }
+        /* --- SOL ALT KUTU DÜZELTMESİ (110PX EŞİTLEME) --- */
+        .summary-box { 
+            height: 110px !important;      /* Footer ile aynı yükseklik */
+            min-height: 110px !important;  /* Küçülmeyi engelle */
+            max-height: 110px !important;  /* Büyümeyi engelle */
+            padding: 0 10px !important;    /* Dikey padding'i sıfırladık, flex ortalayacak */
+            background: var(--dark-footer); 
+            border-top: 1px solid #4b545c; 
+            box-sizing: border-box; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;       /* İçeriği dikeyde tam ortala */
+            align-items: center; 
+            overflow: hidden;              /* Taşmaları gizle */
         }
 
-        .input-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 20px;
-            border-bottom: 1px solid #f1f3f5;
-            transition: background 0.2s;
-        }
-        .input-row:hover { background: #f8f9fa; }
-        
-        .qty-input {
-            width: 60px;
-            padding: 6px;
-            text-align: center;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1.1em;
-        }
-
-        .group-total-row {
-            background: #f1f5f9;
-            color: var(--primary);
-            padding: 6px 20px;
-            font-weight: bold;
-            font-size: 0.9em;
-            text-align: right;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .summary-box {
-            padding: 20px;
-            background: var(--dark-footer);
-            color: white;
-            text-align: center;
-            border-top: 1px solid #4b545c;
-            height: 110px; box-sizing: border-box;
-            display: flex; flex-direction: column; justify-content: center;
-        }
-
-        /* --- SAĞ PANEL --- */
-        .main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: white;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .top-bar {
-            padding: 15px 30px;
-            background: #fff;
-            border-bottom: 1px solid #dee2e6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .platform-info {
-            background: #e3f2fd; color: #0d47a1; padding: 8px 15px; border-radius: 6px; font-weight: bold; border: 1px solid #bbdefb;
-        }
-
-        .content {
-            flex: 1; padding: 30px; overflow: auto; background: #f4f6f9;
-        }
-
-        .card {
-            background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); margin-bottom: 30px; overflow: hidden; border: 1px solid #e0e0e0;
-            display: flex; flex-direction: column;
-        }
-
-        .card-header {
-            background: var(--primary); color: white; padding: 12px 20px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; font-size: 1.1em;
+        /* Yazıları 110px içine sığacak şekilde revize ettik */
+        .sb-label { 
+            color: #adb5bd; 
+            font-size: 0.7em;       /* Biraz küçülttük */
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            text-transform: uppercase; 
+            margin-bottom: 2px;     /* Boşluğu azalttık */
+            opacity: 0.8; 
+            line-height: 1.2;
         }
         
+        .sb-value { 
+            color: #fff; 
+            font-size: 3.2em;       /* 3.8em'den 3.2em'e çektik ki sığsın */
+            font-weight: 900; 
+            line-height: 1;         /* Satır yüksekliğini sıkılaştırdık */
+            font-family: 'Segoe UI', sans-serif; 
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+            margin: 0;
+        }
+        
+        .sb-range { 
+            color: #ffc107; 
+            font-size: 0.85em;      /* Biraz küçülttük */
+            font-weight: 800; 
+            margin-top: 2px;        /* Boşluğu azalttık */
+            line-height: 1.2;
+        }.main { flex: 1; display: flex; flex-direction: column; background: white; overflow: hidden; width: 100%; }
+        .top-bar { padding: 15px 30px; background: #fff; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; }
+        .platform-info { background: #e3f2fd; color: #0d47a1; padding: 8px 15px; border-radius: 6px; font-weight: bold; border: 1px solid #bbdefb; }
+        .content { flex: 1; padding: 30px; overflow: auto; background: #f4f6f9; }
+        
+        .card { background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); margin-bottom: 30px; overflow: hidden; border: 1px solid #e0e0e0; display: flex; flex-direction: column; }
+        .card-header { background: var(--primary); color: white; padding: 12px 20px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; font-size: 1.1em; }
         .header-extra { background: var(--extra-color) !important; }
         .header-master-plus { background: var(--master-color) !important; color: white !important; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .btn-add { background: #28a745; color: white; border: none; padding: 5px 12px; border-radius: 4px; font-size: 0.8em; cursor: pointer; font-weight: bold; }
 
-        .btn-add {
-            background: #28a745; color: white; border: none; padding: 5px 12px; border-radius: 4px; font-size: 0.8em; cursor: pointer; font-weight: bold;
-        }
-
-        /* TABLO RESPONSIVE AYARLARI */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; 
-        }
-
+        .table-responsive { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: center; min-width: 900px; }
+        th { background: #f8f9fa; color: #555; padding: 12px 8px; font-size: 0.85em; border: 1px solid #dee2e6; vertical-align: middle; font-weight: 700; }
+        td { padding: 8px 8px; border: 1px solid #f1f1f1; vertical-align: middle; }
         
-        th {
-            background: #f8f9fa; color: #555; padding: 12px 8px; font-size: 0.85em; border: 1px solid #dee2e6; vertical-align: middle; font-weight: 700;
-        }
-
-        td {
-            padding: 8px 8px; border: 1px solid #f1f1f1; vertical-align: middle;
-        }
-
-        .ref-price {
-            background: #fff; color: #333; font-family: 'Consolas', monospace; font-weight: bold; border: 2px solid #ddd; border-radius: 4px; width: 90%; text-align: right; padding: 6px;
-        }
-
-        .calc-cell {
-            font-family: 'Consolas', monospace; text-align: right; color: #888; font-size: 0.95em; padding-right: 10px; transition: 0.3s;
-        }
-        
-        .active-cell {
-            color: var(--active-text) !important;
-            font-weight: 900 !important;
-            font-size: 1.15em !important;
-            background-color: var(--active-bg);
-            border-radius: 4px;
-            padding: 5px;
-        }
-
-        .level-select {
-            padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-size: 0.9em; width: 100%; color: var(--primary); font-weight: 600;
-        }
-
+        .ref-price { background: #fff; color: #333; font-family: 'Consolas', monospace; font-weight: bold; border: 2px solid #ddd; border-radius: 4px; width: 90%; text-align: right; padding: 6px; }
+        .calc-cell { font-family: 'Consolas', monospace; text-align: right; color: #888; font-size: 0.95em; padding-right: 10px; transition: 0.3s; }
+        .active-cell { color: var(--active-text) !important; font-weight: 900 !important; font-size: 1.15em !important; background-color: var(--active-bg); border-radius: 4px; padding: 5px; }
+        .level-select { padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-size: 0.9em; width: 100%; color: var(--primary); font-weight: 600; }
         .custom-col { background-color: #fff0f0; border-left: 2px solid #dc3545; }
         .custom-input { width: 42%; padding: 5px; border: 1px solid #e0e0e0; border-radius: 3px; text-align: center; font-weight: bold; font-size: 0.9em; }
-        
         .inp-flat { border: none; width: 100%; text-align: left; font-weight: 600; color: #333; }
         .row-total { font-weight: 800; text-align: right; padding-right: 15px; font-size: 1.1em; color: var(--primary); font-family: 'Consolas', monospace;}
-        
         .multiplier-badge { display: inline-block; background: #e2e8f0; color: #475569; font-size: 0.75em; border-radius: 12px; padding: 2px 8px; margin-top: 4px; font-weight: normal; }
-
         .card-footer-summary { background: #fafbfc; border-top: 1px solid #dee2e6; padding: 15px 20px; display: flex; justify-content: flex-end; gap: 40px; }
         .card-stat { text-align: right; border-left: 3px solid var(--secondary); padding-left: 15px; }
         .card-stat small { display: block; font-size: 0.75em; color: #888; text-transform: uppercase; font-weight:bold; }
         .card-stat span { display: block; font-size: 1.2em; color: #333; font-weight: 800; font-family: 'Consolas', monospace;}
 
-        /* --- ÖZEL INPUT TASARIMI (YEŞİL / GRİ) --- */
-        .price-wrapper {
-            position: relative;
-            width: 90%;
-            margin: 0 auto;
-        }
-        
-        .price-input-styled {
-            width: 100%;
-            padding: 8px 30px 8px 10px; /* Sağdan boşluk TL ikonu için */
-            border: 1px solid #ccc; /* Kenarlık eklendi */
-            border-radius: 6px;
-            text-align: right;
-            font-family: 'Consolas', monospace;
-            font-size: 1.1em;
-            background-color: #f9f9f9; /* Gri arka plan */
-            color: #ccc; /* Gri yazı */
-            transition: all 0.2s;
-            box-sizing: border-box;
-        }
-
-        .price-input-styled.filled {
-            background-color: #d1e7dd; /* Açık yeşil */
-            color: #0f5132; /* Koyu yeşil yazı */
-            font-weight: 900;
-            border-color: #badbcc;
-        }
-
-        .currency-symbol {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: #ccc;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-
-        .price-input-styled.filled + .currency-symbol {
-            color: #0f5132;
-        }
-
+        .price-wrapper { position: relative; width: 90%; margin: 0 auto; }
+        .price-input-styled { width: 100%; padding: 8px 30px 8px 10px; border: 1px solid #ccc; border-radius: 6px; text-align: right; font-family: 'Consolas', monospace; font-size: 1.1em; background-color: #f9f9f9; color: #ccc; transition: all 0.2s; box-sizing: border-box; }
+        .price-input-styled.filled { background-color: #d1e7dd; color: #0f5132; font-weight: 900; border-color: #badbcc; }
+        .currency-symbol { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #ccc; font-weight: bold; transition: color 0.2s; }
+        .price-input-styled.filled + .currency-symbol { color: #0f5132; }
         .row-disabled { opacity: 0.4; background-color: #f9f9f9; }
         .row-select { width: 18px; height: 18px; cursor: pointer; }
         .del-cell { color: #dc3545; cursor: pointer; font-weight: bold; font-size: 1.2em; text-align: center; }
 
-        /* FOOTER */
-        .footer {
-            background: var(--dark-footer); 
-            border-top: 1px solid #4b545c; 
-            padding: 20px 40px; 
-            display: grid; 
-            grid-template-columns: repeat(5, 1fr); 
-            gap: 20px; 
-            z-index: 20; 
-            height: 110px; 
-            box-sizing: border-box; 
-            align-items: center;
-        }
-        .kpi { 
-            text-align: center; padding: 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center;
-        }
+        .footer { background: var(--dark-footer); border-top: 1px solid #4b545c; padding: 20px 40px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; z-index: 20; height: 110px; box-sizing: border-box; align-items: center; }
+        .kpi { text-align: center; padding: 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); color: white; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; }
         .kpi small { display: block; font-size: 0.7em; color: #ced4da; text-transform: uppercase; font-weight: 700; margin-bottom: 5px;}
         .kpi div { font-size: 1.4em; font-weight: 800; color: #fff; }
         .highlight { background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.3); }
         .highlight div { color: #ffc107; }
         .highlight-extra { background: rgba(111, 66, 193, 0.25); border-color: rgba(111, 66, 193, 0.4); }
         .highlight-extra div { color: #d6b3ff; }
-
         .drag-handle { cursor: grab; color: #aaa; font-size: 1.2em; width: 30px; user-select: none; }
         .dragging { opacity: 0.5; background-color: #f0f0f0; border: 2px dashed #999; }
 
-        /* --- RESPONSIVE CSS --- */
-        @media screen and (max-width: 900px) {
-            body { flex-direction: column; height: auto; overflow-y: auto; }
-            .sidebar { width: 100%; min-width: 100%; height: auto; border-right: none; border-bottom: 4px solid var(--primary); position: relative; }
-            .scroll-y { max-height: 250px; border-bottom: 1px solid #ddd; }
-            .summary-box { height: auto; flex-direction: row; justify-content: space-around; align-items: center; padding: 15px; }
-            .main { width: 100%; height: auto; overflow: visible; }
-            .content { padding: 10px; overflow: visible; }
-            .top-bar { flex-direction: column; gap: 10px; text-align: center; }
-            .footer { grid-template-columns: 1fr 1fr; height: auto; padding: 15px; }
-            .footer .kpi:last-child { grid-column: span 2; }
-            .card-footer-summary { flex-direction: column; gap: 10px; text-align: center; align-items: center; }
-            .card-stat { border-left: none; border-bottom: 2px solid var(--secondary); padding-bottom: 5px; padding-left: 0; width: 100%; text-align: center; }
-        }
-        @media screen and (max-width: 480px) {
-            .footer { grid-template-columns: 1fr; }
-            .footer .kpi:last-child { grid-column: auto; }
-            .kpi div { font-size: 1.2em; }
-        }
+        /* ==========================================================================
+           YAZDIRMA (PDF) AYARLARI - KOYU FOOTER GERİ GELDİ
+           ========================================================================== */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 5mm;
+            }
 
+            /* Renk Zorlama */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            /* Scroll iptal, tam görünüm */
+            body, .sidebar, .main, .content, .scroll-y {
+                height: auto !important;
+                overflow: visible !important;
+                display: block !important;
+                background-color: white; 
+            }
+
+            /* Sidebar: Üstte yatay şerit */
+            .sidebar {
+                width: 100% !important;
+                min-width: 100% !important;
+                border: none;
+                box-shadow: none;
+                margin-bottom: 10px;
+                border-bottom: 3px solid var(--primary);
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .sidebar .header { 
+                padding: 5px; font-size: 1em; 
+                background-color: var(--primary) !important;
+                color: white !important;
+            }
+            
+            /* Özet Kutusu: KOYU RENK */
+            .sidebar .summary-box {
+                height: auto;
+                padding: 10px;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                background-color: var(--dark-footer) !important;
+                color: white !important;
+                border: none;
+            }
+            .sidebar .summary-box div { color: #fff !important; font-size: 1.5em !important; }
+            .sidebar .summary-box small { color: #ced4da !important; }
+
+            /* Öğrenci Grid */
+            .scroll-y {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 5px;
+                padding: 5px;
+                border-bottom: none;
+            }
+            .group-title { padding: 2px 5px; font-size: 0.7em; margin-top: 5px; background-color: #e9ecef !important; }
+            .input-row { padding: 2px 5px; font-size: 0.8em; border: 1px solid #eee; }
+            .group-total-row { padding: 2px 5px; font-size: 0.8em; text-align: center; background-color: #f1f5f9 !important; }
+
+            /* Ana İçerik */
+            .main { width: 100% !important; }
+            .content { padding: 0 !important; background-color: white !important; }
+            
+            /* KARTLAR: Bölünmez & Renkli */
+            .card {
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 20px;
+                break-inside: avoid;
+                page-break-inside: avoid;
+                break-before: auto;
+            }
+            .card-header {
+                background-color: var(--primary) !important;
+                color: white !important;
+            }
+            .header-extra { background-color: var(--extra-color) !important; }
+            .header-master-plus { background-color: var(--master-color) !important; }
+
+            /* Tablolar */
+            table { font-size: 10px; min-width: 100%; }
+            th { background-color: #f8f9fa !important; color: #333 !important; }
+            td { padding: 4px 2px; }
+
+            /* Inputlar */
+            .qty-input, .price-input-styled {
+                font-size: 1em !important;
+                padding: 2px !important;
+                border: none !important;
+                text-align: center;
+            }
+            .price-input-styled { text-align: right; }
+            .price-input-styled.filled {
+                background-color: #d1e7dd !important;
+                color: #0f5132 !important;
+                font-weight: bold !important;
+            }
+
+            /* === FOOTER (ALT TOPLAMLAR) - KOYU RENKLER GERİ GELDİ === */
+            .footer {
+                height: auto;
+                padding: 20px 10px !important; /* Biraz daha padding */
+                background-color: var(--dark-footer) !important; /* KOYU ARKA PLAN */
+                color: white !important; /* BEYAZ METİN */
+                position: relative;
+                margin-top: 20px;
+                break-inside: avoid;
+                page-break-inside: avoid;
+                break-before: auto;
+                border: none;
+                display: grid;
+                gap: 10px;
+            }
+            
+            /* KPI Kutuları: Koyu zemine uygun transparanlık */
+            .kpi {
+                background-color: rgba(255, 255, 255, 0.1) !important;
+                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                color: white !important;
+                padding: 15px 5px !important;
+            }
+            .kpi div { color: #fff !important; font-size: 1.4em !important; font-weight: 800; }
+            .kpi small { color: #ced4da !important; font-size: 0.8em !important; }
+            
+            /* Highlight renklerini (Sarı/Mor) daha belirgin yap */
+            .highlight { background-color: rgba(255, 193, 7, 0.25) !important; border-color: rgba(255, 193, 7, 0.5) !important; }
+            .highlight div { color: #ffc107 !important; }
+            .highlight-extra { background-color: rgba(111, 66, 193, 0.3) !important; border-color: rgba(111, 66, 193, 0.5) !important; }
+            .highlight-extra div { color: #d6b3ff !important; }
+
+            /* Gizlenecekler */
+            .btn-add, .del-cell, .drag-handle, .top-bar button, .no-print, .platform-info {
+                display: none !important;
+            }
+        }
     </style>
 </head>
-<body>
+<body id="appBody">
 
 <div class="sidebar">
     <div class="header">ÖĞRENCİ GİRİŞİ</div>
     
     <div class="scroll-y">
-        <div class="group-title">OKUL ÖNCESİ</div>
-        <div class="input-row"><label>0. Sınıf</label><input type="number" id="s0" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="group-total-row">Toplam: <span id="sub_pre">0</span></div>
+        <div>
+            <div class="group-title">OKUL ÖNCESİ</div>
+            <div class="input-row"><label>0. Sınıf</label><input type="number" id="s0" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="group-total-row">Top: <span id="sub_pre">0</span></div>
+        </div>
 
-        <div class="group-title">İLKOKUL (1-4)</div>
-        <div class="input-row"><label>1. Sınıf</label><input type="number" id="s1" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="input-row"><label>2. Sınıf</label><input type="number" id="s2" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="input-row"><label>3. Sınıf</label><input type="number" id="s3" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="input-row"><label>4. Sınıf</label><input type="number" id="s4" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="group-total-row">İlkokul Toplam: <span id="sub_primary">0</span></div>
+        <div>
+            <div class="group-title">İLKOKUL (1-4)</div>
+            <div class="input-row"><label>1. Sınıf</label><input type="number" id="s1" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="input-row"><label>2. Sınıf</label><input type="number" id="s2" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="input-row"><label>3. Sınıf</label><input type="number" id="s3" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="input-row"><label>4. Sınıf</label><input type="number" id="s4" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="group-total-row">Top: <span id="sub_primary">0</span></div>
+        </div>
 
-        <div class="group-title">ORTAOKUL (5-8)</div>
-        <div class="input-row"><label>5. Sınıf</label><input type="number" id="s5" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="input-row"><label>6. Sınıf</label><input type="number" id="s6" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="input-row"><label>7. Sınıf</label><input type="number" id="s7" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="input-row"><label>8. Sınıf</label><input type="number" id="s8" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="group-total-row">Ortaokul Toplam: <span id="sub_middle">0</span></div>
+        <div>
+            <div class="group-title">ORTAOKUL (5-8)</div>
+            <div class="input-row"><label>5. Sınıf</label><input type="number" id="s5" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="input-row"><label>6. Sınıf</label><input type="number" id="s6" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="input-row"><label>7. Sınıf</label><input type="number" id="s7" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="input-row"><label>8. Sınıf</label><input type="number" id="s8" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="group-total-row">Top: <span id="sub_middle">0</span></div>
+        </div>
 
-        <div class="group-title">LİSE (9-12)</div>
-        <div class="input-row"><label>9. Sınıf</label><input type="number" id="s9" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="input-row"><label>10. Sınıf</label><input type="number" id="s10" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="input-row"><label>11. Sınıf</label><input type="number" id="s11" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="input-row"><label>12. Sınıf</label><input type="number" id="s12" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
-        <div class="group-total-row">Lise Toplam: <span id="sub_high">0</span></div>
+        <div>
+            <div class="group-title">LİSE (9-12)</div>
+            <div class="input-row"><label>9. Sınıf</label><input type="number" id="s9" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="input-row"><label>10. Sınıf</label><input type="number" id="s10" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="input-row"><label>11. Sınıf</label><input type="number" id="s11" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="input-row"><label>12. Sınıf</label><input type="number" id="s12" class="qty-input" value="0" min="0" oninput="calculateAll()"></div>
+            <div class="group-total-row">Top: <span id="sub_high">0</span></div>
+        </div>
     </div>
 
-    <div class="summary-box">
-        <small style="opacity:0.7; letter-spacing:1px; color:#ced4da;">TOPLAM ÖĞRENCİ</small>
-        <div style="font-size:2.5em; font-weight:bold; margin-top:5px; color:#fff;" id="lblTotalStudents">0</div>
-        <div style="color:#ffc107; margin-top:5px; font-weight:bold; font-size:0.9em;" id="lblRangeInfo">Seçim Yok</div>
+   <div class="summary-box">
+        <div class="sb-label">TOPLAM ÖĞRENCİ</div>
+        <div id="lblTotalStudents" class="sb-value">0</div>
+        <div id="lblRangeInfo" class="sb-range">Seçim Yok</div>
     </div>
 </div>
 
@@ -337,11 +327,16 @@
             ℹ️ Paket Bilgileri: <strong>TeknoPaket (399 ₺)</strong> | <strong>MasterPaket (1050 ₺)</strong>
         </div>
         <div style="color:#666; font-size:0.9em; text-align:right; display:flex; align-items:center; gap:20px;">
-            <div>
+            <div class="no-print">
                 <div>* ☰ İkonundan tutarak sıralamayı değiştirebilirsiniz.</div>
             </div>
-            <button onclick="resetData()" style="background:#dc3545; color:white; border:none; padding:8px 12px; border-radius:4px; cursor:pointer; font-weight:bold;">
-                🗑 Sıfırla (Varsayılan)
+            
+            <button onclick="window.print()" style="background:#0d6efd; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold; display:flex; align-items:center; gap:5px; font-size:14px;">
+                <span>🖨️</span> PDF Olarak Kaydet / Yazdır
+            </button>
+
+            <button onclick="resetData()" class="no-print" style="background:#dc3545; color:white; border:none; padding:8px 12px; border-radius:4px; cursor:pointer; font-weight:bold;">
+                🗑 Sıfırla
             </button>
         </div>
     </div>
@@ -360,7 +355,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th width="30"></th>
+                            <th width="30" class="drag-handle"></th>
                             <th width="30">Seç</th>
                             <th width="15%" style="text-align:left; padding-left:10px;">MALZEME ADI</th>
                             <th width="10%">HEDEF KADEME</th>
@@ -371,7 +366,7 @@
                             <th class="col-range">Lab Dağalımı (4/4) 1000+<br><span class="multiplier-badge">x24 Adet</span></th>
                             <th class="custom-col" width="10%">ÖZEL<br><small>Adet & Fiyat</small></th>
                             <th width="10%">TOPLAM</th>
-                            <th width="30"></th>
+                            <th width="30" class="del-cell"></th>
                         </tr>
                     </thead>
                     <tbody id="bodyMaterials" class="sortable-list"></tbody>
@@ -395,7 +390,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th width="30"></th>
+                            <th width="30" class="drag-handle"></th>
                             <th width="30">Seç</th>
                             <th width="15%" style="text-align:left; padding-left:10px;">PROJE ADI</th>
                             <th width="10%">HEDEF KADEME</th>
@@ -406,7 +401,7 @@
                             <th class="col-range">Lab Dağalımı (72) 1000+<br><span class="multiplier-badge">x12 Adet</span></th>
                             <th class="custom-col" width="10%">ÖZEL<br><small>Adet & Fiyat</small></th>
                             <th width="10%">TOPLAM</th>
-                            <th width="30"></th>
+                            <th width="30" class="del-cell"></th>
                         </tr>
                     </thead>
                     <tbody id="bodyProjects" class="sortable-list"></tbody>
@@ -429,12 +424,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th width="30"></th>
+                            <th width="30" class="drag-handle"></th>
                             <th width="30">Seç</th>
                             <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
                             <th width="15%">BİRİM FİYAT</th>
                             <th width="10%">ADET</th> <th width="20%">TOPLAM TUTAR</th>
-                            <th width="30"></th>
+                            <th width="30" class="del-cell"></th>
                         </tr>
                     </thead>
                     <tbody id="bodyIndividual" class="sortable-list"></tbody>
@@ -450,21 +445,20 @@
             <div class="card-header header-extra">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <span>🧪 DENEY SETLERİ SEÇİMİ</span>
-                    <!--<button class="btn-add" onclick="addNewRow('experimentSets')">+ Ekle</button>-->
-                </div>
+                    </div>
                 <small style="font-weight:normal; opacity:0.9;">Adet Manuel Girilir  (Ana Ortalamaya Katılmaz)</small>
             </div>
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th width="30"></th>
+                            <th width="30" class="drag-handle"></th>
                             <th width="30">Seç</th>
                             <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
                             <th width="15%">BİRİM FİYAT</th>
                             <th width="15%">ADET (Manuel)</th>
                             <th width="20%">TOPLAM TUTAR</th>
-                            <th width="30"></th>
+                            <th width="30" class="del-cell"></th>
                         </tr>
                     </thead>
                     <tbody id="bodyExperimentSets" class="sortable-list"></tbody>
@@ -480,21 +474,20 @@
             <div class="card-header header-extra">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <span>🧸 OKUL ÖNCESİ KUTU SEÇİMİ</span>
-                    <!--<button class="btn-add" onclick="addNewRow('preschoolBoxes')">+ Ekle</button>-->
-                </div>
+                    </div>
                 <small style="font-weight:normal; opacity:0.9;">Adet Manuel Girilir (Ana Ortalamaya Katılmaz)</small>
             </div>
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th width="30"></th>
+                            <th width="30" class="drag-handle"></th>
                             <th width="30">Seç</th>
                             <th width="40%" style="text-align:left; padding-left:15px;">ÜRÜN ADI</th>
                             <th width="15%">BİRİM FİYAT</th>
                             <th width="15%">ADET (Manuel)</th>
                             <th width="20%">TOPLAM TUTAR</th>
-                            <th width="30"></th>
+                            <th width="30" class="del-cell"></th>
                         </tr>
                     </thead>
                     <tbody id="bodyPreschoolBoxes" class="sortable-list"></tbody>
@@ -510,21 +503,20 @@
             <div class="card-header header-master-plus">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <span>💎 PLUS HİZMET PAKETİ SEÇİMİ (SADECE MASTER)</span>
-                    <!--<button class="btn-add" style="background:#856404;" onclick="addNewRow('plusServices')">+ Ekle</button>-->
-                </div>
+                    </div>
                 <small style="font-weight:normal; opacity:1;">Sadece Master Paket'e Öğrenci Başı Ücret Eklenir ! | Adet = Toplam Öğrenci Sayısı</small>
             </div>
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
-                            <th width="30"></th>
+                            <th width="30" class="drag-handle"></th>
                             <th width="30">Seç</th>
                             <th width="40%" style="text-align:left; padding-left:15px;">HİZMET ADI</th>
                             <th width="15%">BİRİM FİYAT</th>
                             <th width="15%">ADET</th>
                             <th width="20%">TOPLAM TUTAR</th>
-                            <th width="30"></th>
+                            <th width="30" class="del-cell"></th>
                         </tr>
                     </thead>
                     <tbody id="bodyPlusServices" class="sortable-list"></tbody>
@@ -563,33 +555,15 @@
 </div>
 
 <script>
-    // --- YAZILIM GELİŞTİRİCİ İMZASI (SİLİNEMEZ/DEĞİŞTİRİLEMEZ) ---
+    // --- YAZILIM GELİŞTİRİCİ İMZASI ---
     (function() {
         const DEVELOPER_INFO = Object.freeze({
             name: "Bahadır Çalışkan", 
             contact: "Yazılım Geliştirici", 
             version: "v30.0",
-            copyright: "© 2025 Bahadır Çalışkan - Tüm Hakları Saklıdır",
-            message: "Bu yazılım mimarisi ve kod yapısı Bahadır Çalışkan tarafından tasarlanmıştır."
+            copyright: "© 2025 Bahadır Çalışkan - Tüm Hakları Saklıdır"
         });
-
-        Object.defineProperty(window, 'SYS_AUTHOR', {
-            value: DEVELOPER_INFO,
-            writable: false,     
-            configurable: false, 
-            enumerable: true     
-        });
-
-        console.log(
-            "%c 🛑 Geliştirici İmzası: " + DEVELOPER_INFO.name + " ",
-            "background: #b91c1c; color: #ffffff; font-size: 16px; font-weight: bold; padding: 10px; border-radius: 5px;"
-        );
-        console.log(
-            "%c Bu proje " + DEVELOPER_INFO.name + " tarafından kodlanmıştır. " +
-            "İzinsiz kopyalanması veya kaynak gösterilmeden kullanılması yasaktır.\n" + 
-            "Versiyon: " + DEVELOPER_INFO.version,
-            "background: #203764; color: #ffffff; font-size: 12px; padding: 5px; border-radius: 4px;"
-        );
+        console.log("Developer: " + DEVELOPER_INFO.name);
     })();
     // -----------------------------------------------------------
 
@@ -701,6 +675,7 @@
         calculateAll(true);
         initDragAndDrop();
     };
+
 
     // --- LOCAL STORAGE ---
     function saveToLocal() {
@@ -891,7 +866,6 @@
         updateAllInputStyles();
     }
 
-    // --- YENİ TASARIMLI INPUT HESAPLAMA VE STİL FONKSİYONU ---
     function stylePriceInput(input) {
         let val = parseFloat(input.value);
         if(val > 0) {
@@ -930,8 +904,6 @@
             <td class="del-cell" onclick="delRow(this)">×</td>
         </tr>`;
     }
-
-    // --- GÜNCELLENMİŞ HTML OLUŞTURUCULAR (WRAPPER İLE) ---
 
     function createIndividualRow(name, price, target, qtyVal, isChecked) {
         let checkAttr = isChecked ? 'checked' : '';
